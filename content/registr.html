@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <!-- Подключение Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Подключение кастомного CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Навбар -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Логотип</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Войти</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Контент страницы регистрации -->
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card p-4" style="width: 100%; max-width: 700px;">
+            <h3 class="text-center mb-4">Регистрация</h3>
+            <form>
+                <div class="row gx-5"> <!-- Увеличение отступа между колонками -->
+                    <!-- Левая колонка -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="login" class="form-label">Логин</label>
+                            <input type="text" class="form-control" id="login" placeholder="Введите логин">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Пароль</label>
+                            <input type="password" class="form-control" id="password" placeholder="Введите пароль">
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Повторите пароль</label>
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Повторите пароль">
+                        </div>
+                        <div class="mb-3">
+                            <label for="birthDate" class="form-label">Дата рождения</label>
+                            <input type="date" class="form-control" id="birthDate">
+                        </div>
+                    </div>
+
+                    <!-- Правая колонка -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Фамилия</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="Введите фамилию">
+                        </div>
+                        <div class="mb-3">
+                            <label for="firstName" class="form-label">Имя</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="Введите имя">
+                        </div>
+                        <div class="mb-3">
+                            <label for="middleName" class="form-label">Отчество</label>
+                            <input type="text" class="form-control" id="middleName" placeholder="Введите отчество">
+                        </div>
+                        <div class="mb-3">
+                            <label for="citizenship" class="form-label">Гражданство</label>
+                            <input type="text" class="form-control" id="citizenship" placeholder="Введите гражданство">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Выпадающий список и загрузка фото -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="group" class="form-label">Выберите группу</label>
+                            <select class="form-select" id="group">
+                                <option selected>Выберите группу</option>
+                                <option value="1">Группа 1</option>
+                                <option value="2">Группа 2</option>
+                                <option value="3">Группа 3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="photo" class="form-label">Загрузите фото</label>
+                            <input type="file" class="form-control" id="photo">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Подключение Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
