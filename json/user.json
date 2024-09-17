@@ -1,0 +1,13 @@
+[
+  {
+    "login": "admin",
+    "password": "admin",
+    "lastName": "admin",
+    "firsName": "admin",
+    "patronymic": "admin",
+    "nationality": "ru",
+    "birthday": 2000,
+    "group": "admin",
+    "photo":
+  }
+]
