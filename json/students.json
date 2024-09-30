@@ -1,0 +1,19 @@
+[{
+  "_id": {
+    "$oid": "6504b6b565d4f9e6e4e5b0a3"
+  },
+  "username": "student_username",
+  "phone_number": "123456789",
+  "email": "student@example.com",
+  "additional_info": "Additional information"
+},
+{
+  "_id": {
+    "$oid": "66fa934ac77140aa917b9b0d"
+  },
+  "username": "123",
+  "phone_number": "321",
+  "email": "12@1",
+  "additional_info": "у",
+  "__v": 0
+}]

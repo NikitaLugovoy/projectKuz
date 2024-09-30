@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Электронный дневник</title>
+    <!-- Подключение Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Подключение кастомного CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Навбар -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Логотип</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Личный кабинет</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Выход</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Контент страницы электронного дневника -->
+    <div class="container d-flex flex-column justify-content-center align-items-center vh-100">
+        <div class="text-center mb-4">
+            <h3>Группа: Группа 1</h3> <!-- Название группы -->
+        </div>
+
+        <!-- Форма для добавления нового студента -->
+        <form id="student-form" class="mb-4">
+            <h4>Добавить нового студента</h4>
+            <div class="mb-3">
+                <label for="username" class="form-label">Имя пользователя</label>
+                <input type="text" class="form-control" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone_number" class="form-label">Номер телефона</label>
+                <input type="text" class="form-control" name="phone_number" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Электронная почта</label>
+                <input type="email" class="form-control" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="additional_info" class="form-label">Дополнительная информация</label>
+                <input type="text" class="form-control" name="additional_info">
+            </div>
+            <button type="submit" class="btn btn-primary">Добавить студента</button>
+        </form>
+
+        <!-- Таблица студентов -->
+        <table class="table table-bordered text-center">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Имя пользователя</th>
+                    <th scope="col">Номер телефона</th>
+                    <th scope="col">Электронная почта</th>
+                    <th scope="col">Дополнительная информация</th>
+                    <th scope="col">Действия</th>
+                </tr>
+            </thead>
+            <tbody id="student-table-body">
+                {{#each students}}
+                <tr id="student-{{this._id}}">
+                    <td class="username">{{this.username}}</td>
+                    <td class="phone_number">{{this.phone_number}}</td>
+                    <td class="email">{{this.email}}</td>
+                    <td class="additional_info">{{this.additional_info}}</td>
+                    <td>
+                        <button class="btn btn-warning edit-btn" data-id="{{this._id}}">Редактировать</button>
+                        <button class="btn btn-danger delete-btn" data-id="{{this._id}}">Удалить</button>
+                    </td>
+                </tr>
+                <tr id="edit-form-{{this._id}}" class="edit-form" style="display: none;">
+                    <td colspan="5">
+                        <form class="d-flex edit-student-form" data-id="{{this._id}}">
+                            <input type="text" name="username" class="form-control" value="{{this.username}}" required>
+                            <input type="text" name="phone_number" class="form-control" value="{{this.phone_number}}" required>
+                            <input type="email" name="email" class="form-control" value="{{this.email}}" required>
+                            <input type="text" name="additional_info" class="form-control" value="{{this.additional_info}}">
+                            <button type="submit" class="btn btn-success">Сохранить</button>
+                            <button type="button" class="btn btn-secondary cancel-btn" data-id="{{this._id}}">Отмена</button>
+                        </form>
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="5">Нет студентов</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Подключение Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // JavaScript для обработки добавления студента
+        document.getElementById('student-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Предотвращаем стандартное поведение формы
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            fetch('/students', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Ошибка при добавлении студента.");
+                }
+            })
+            .then(student => {
+                // Создание новой строки для таблицы студентов
+                const tableBody = document.getElementById('student-table-body');
+                const newRow = document.createElement('tr');
+                newRow.id = `student-${student._id}`;
+                newRow.innerHTML = `
+                    <td class="username">${student.username}</td>
+                    <td class="phone_number">${student.phone_number}</td>
+                    <td class="email">${student.email}</td>
+                    <td class="additional_info">${student.additional_info || ''}</td>
+                    <td>
+                        <button class="btn btn-warning edit-btn" data-id="${student._id}">Редактировать</button>
+                        <button class="btn btn-danger delete-btn" data-id="${student._id}">Удалить</button>
+                    </td>
+                `;
+                tableBody.appendChild(newRow); // Добавляем новую строку в таблицу
+                this.reset(); // Сбрасываем форму
+            })
+            .catch(error => {
+                console.error("Ошибка:", error);
+                alert("Произошла ошибка при добавлении студента.");
+            });
+        });
+
+        // JavaScript для обработки редактирования студентов
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const studentId = this.getAttribute('data-id');
+                document.getElementById(`edit-form-${studentId}`).style.display = 'table-row';
+                document.getElementById(`student-${studentId}`).style.display = 'none';
+            });
+        });
+
+        document.querySelectorAll('.cancel-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const studentId = this.getAttribute('data-id');
+                document.getElementById(`edit-form-${studentId}`).style.display = 'none';
+                document.getElementById(`student-${studentId}`).style.display = 'table-row';
+            });
+        });
+
+        // JavaScript для удаления студента
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const studentId = this.getAttribute('data-id');
+                if (confirm("Вы уверены, что хотите удалить этого студента?")) {
+                    fetch(`/students/${studentId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            document.getElementById(`student-${studentId}`).remove(); // Удаляем строку таблицы
+                        } else {
+                            alert("Ошибка при удалении студента.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Ошибка:", error);
+                        alert("Произошла ошибка при удалении студента.");
+                    });
+                }
+            });
+        });
+
+        // JavaScript для сохранения изменений студента
+        document.querySelectorAll('.edit-student-form').forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Предотвращаем стандартное поведение формы
+
+                const studentId = this.getAttribute('data-id');
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData.entries());
+
+                fetch(`/students/${studentId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error("Ошибка при сохранении изменений студента.");
+                    }
+                })
+                .then(student => {
+                    // Обновляем строку в таблице
+                    const row = document.getElementById(`student-${studentId}`);
+                    row.querySelector('.username').textContent = student.username;
+                    row.querySelector('.phone_number').textContent = student.phone_number;
+                    row.querySelector('.email').textContent = student.email;
+                    row.querySelector('.additional_info').textContent = student.additional_info || '';
+                    document.getElementById(`edit-form-${studentId}`).style.display = 'none'; // Скрываем форму редактирования
+                    row.style.display = 'table-row'; // Показываем обновленную строку
+                })
+                .catch(error => {
+                    console.error("Ошибка:", error);
+                    alert("Произошла ошибка при сохранении изменений студента.");
+                });
+            });
+        });
+    </script>
+</body>
+</html>
