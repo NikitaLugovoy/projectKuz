@@ -1,5 +1,7 @@
 let express = require("express");
 let axios = require('axios');
+const Handlebars = require('handlebars');
+
 let app = express();
 let port = 3005;
 
@@ -32,8 +34,13 @@ let Event = mongoose.model('user', eventSchema);
 const hbs = require('hbs');
 app.set('views', 'views');
 app.set('view engine', 'hbs');
+
 // Раздача статики
 app.use(express.static("static"));
+
+hbs.registerHelper('eq', function (a, b) {
+    return a === b;
+});
 
 app.get('/', async (req,res) => {
     res.render('login');
@@ -75,206 +82,6 @@ app.post('/register', async (req, res) => {
 });
 
 
-
-
-// Схема студента
-let studentSchema = new mongoose.Schema({
-    username: String,
-    phone_number: String,
-    email: String,
-    additional_info: String
-});
-
-let Student = mongoose.model('Student', studentSchema);
-
-
-
-app.get('/students', async (req, res) => {
-    try {
-        const students = await Student.find();
-        res.render('student', { students }); // Render the HBS template and pass the students data
-    } catch (error) {
-        console.error('Error fetching students:', error);
-        res.status(500).send(error);
-    }
-});
-
-app.post('/students', async (req, res) => {
-    const { username, phone_number, email, additional_info } = req.body;
-
-    const newStudent = new Student({
-        username,
-        phone_number,
-        email,
-        additional_info
-    });
-
-    try {
-        const savedStudent = await newStudent.save();
-        res.status(201).json(savedStudent);
-    } catch (error) {
-        console.error('Ошибка при добавлении студента:', error);
-        res.status(500).send('Ошибка при добавлении студента');
-    }
-});
-
-// Read a single student by ID
-app.get('/students/:id', async (req, res) => {
-    try {
-        const student = await Student.findById(req.params.id);
-        if (!student) {
-            return res.status(404).send('Student not found');
-        }
-        res.status(200).send(student);
-    } catch (error) {
-        console.error('Error fetching student:', error);
-        res.status(500).send(error);
-    }
-});
-
-app.post('/students/:id', async (req, res) => {
-    const studentId = req.params.id;
-    const { username, phone_number, email, additional_info } = req.body;
-    
-    try {
-        await Student.findByIdAndUpdate(studentId, {
-            username,
-            phone_number,
-            email,
-            additional_info
-        });
-        res.redirect('/students'); // Redirect back to the students page after update
-    } catch (error) {
-        console.error('Error updating student:', error);
-        res.status(500).send(error);
-    }
-});
-
-app.put('/students/:id', async (req, res) => {
-    const studentId = req.params.id;
-    const { username, phone_number, email, additional_info } = req.body;
-
-    try {
-        const updatedStudent = await Student.findByIdAndUpdate(
-            studentId,
-            { username, phone_number, email, additional_info },
-            { new: true }
-        );
-
-        if (!updatedStudent) {
-            return res.status(404).send('Студент не найден.');
-        }
-
-        res.status(200).json(updatedStudent);
-    } catch (error) {
-        console.error('Error updating student:', error);
-        res.status(500).send(error);
-    }
-});
-
-
-// Delete a student by ID
-app.delete('/students/:id', async (req, res) => {
-    const studentId = req.params.id;
-    
-    try {
-        await Student.findByIdAndDelete(studentId);
-        res.status(204).send(); // No content, indicates successful deletion
-    } catch (error) {
-        console.error('Error deleting student:', error);
-        res.status(500).send(error);
-    }
-});
-
-
-
-
-const teacherSchema = new mongoose.Schema({
-    full_name: {
-        type: String,
-        required: true, // Полное имя обязательно
-    },
-    login: {
-        type: String,
-        required: true, // Логин обязательно
-        unique: true,   // Логин должен быть уникальным
-    },
-    password: {
-        type: String,
-        required: true, // Пароль обязательно
-    },
-}, {
-    timestamps: true // Автоматическое добавление полей createdAt и updatedAt
-});
-
-// Создание модели для учителей
-const Teacher = mongoose.model('Teacher', teacherSchema);
-
-app.get('/teachers', async (req, res) => {
-    try {
-        const teachers = await Teacher.find();
-        res.render('teacher', { teachers });
-    } catch (error) {
-        console.error('Ошибка при получении учителей:', error);
-        res.status(500).send('Ошибка при получении учителей');
-    }
-});
-
-
-app.post('/teachers', async (req, res) => {
-    const { full_name, login, password } = req.body;
-
-    const newTeacher = new Teacher({
-        full_name,
-        login,
-        password
-    });
-
-    try {
-        const savedTeacher = await newTeacher.save();
-        res.status(201).json(savedTeacher);
-    } catch (error) {
-        console.error('Ошибка при добавлении учителя:', error);
-        res.status(500).send('Ошибка при добавлении учителя');
-    }
-});
-
-
-app.put('/teachers/:id', async (req, res) => {
-    const teacherId = req.params.id;
-    const { full_name, login, password } = req.body;
-
-    try {
-        const updatedTeacher = await Teacher.findByIdAndUpdate(teacherId, { full_name, login, password }, { new: true });
-        if (!updatedTeacher) {
-            return res.status(404).send('Учитель не найден.');
-        }
-        res.status(200).json(updatedTeacher);
-    } catch (error) {
-        console.error('Ошибка при редактировании учителя:', error);
-        res.status(500).send('Ошибка при редактировании учителя');
-    }
-});
-
-
-app.delete('/teachers/:id', async (req, res) => {
-    const teacherId = req.params.id;
-
-    try {
-        const deletedTeacher = await Teacher.findByIdAndDelete(teacherId);
-        if (!deletedTeacher) {
-            return res.status(404).send('Учитель не найден.');
-        }
-        res.status(200).send('Учитель успешно удален.');
-    } catch (error) {
-        console.error('Ошибка при удалении учителя:', error);
-        res.status(500).send('Ошибка при удалении учителя');
-    }
-});
-
-
-
-
 // Создание схемы для групп
 const groupSchema = new mongoose.Schema({
     name: {
@@ -285,6 +92,8 @@ const groupSchema = new mongoose.Schema({
 }, {
     timestamps: true // Автоматическое добавление полей createdAt и updatedAt
 });
+
+
 
 // Создание модели для групп
 const Group = mongoose.model('Group', groupSchema);
@@ -429,3 +238,218 @@ app.delete('/achievements/:id', async (req, res) => {
         res.status(500).send('Ошибка при удалении достижения');
     }
 });
+
+
+
+// Схема студента
+let studentSchema = new mongoose.Schema({
+    username: String,
+    phone_number: String,
+    email: String,
+    additional_info: String,
+    group_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Group' // Reference to the Group model
+    }
+});
+
+
+let Student = mongoose.model('Student', studentSchema);
+
+
+
+app.get('/students', async (req, res) => {
+    try {
+        const students = await Student.find().populate('group_id'); // Populate group data
+        const groups = await Group.find(); // Fetch all groups
+        console.log(groups);
+        res.render('student', { students, groups, groups2: groups }); // Pass students and groups to the HBS template
+
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        res.status(500).send(error);
+    }
+});
+
+
+app.post('/students', async (req, res) => {
+    try {
+        const { username, phone_number, email, additional_info, group_id } = req.body;
+        const newStudent = new Student({
+            username,
+            phone_number,
+            email,
+            additional_info,
+            group_id
+        });
+
+        const savedStudent = await newStudent.save();
+        const populatedStudent = await Student.findById(savedStudent._id).populate('group_id'); // Populate group_id
+
+        res.status(201).json(populatedStudent); // Return the populated student object
+    } catch (error) {
+        console.error('Error adding student:', error);
+        res.status(500).json({ error: 'Error adding student' });
+    }
+});
+
+
+
+// Read a single student by ID
+app.get('/students/:id', async (req, res) => {
+    try {
+        const student = await Student.findById(req.params.id);
+        if (!student) {
+            return res.status(404).send('Student not found');
+        }
+        res.status(200).send(student);
+    } catch (error) {
+        console.error('Error fetching student:', error);
+        res.status(500).send(error);
+    }
+});
+
+app.post('/students/:id', async (req, res) => {
+    const studentId = req.params.id;
+    const { username, phone_number, email, additional_info } = req.body;
+    
+    try {
+        await Student.findByIdAndUpdate(studentId, {
+            username,
+            phone_number,
+            email,
+            additional_info
+        });
+        res.redirect('/students'); // Redirect back to the students page after update
+    } catch (error) {
+        console.error('Error updating student:', error);
+        res.status(500).send(error);
+    }
+});
+
+app.put('/students/:id', async (req, res) => {
+    const studentId = req.params.id;
+    const { username, phone_number, email, additional_info, group_id } = req.body;
+
+    try {
+        const updatedStudent = await Student.findByIdAndUpdate(studentId, {
+            username,
+            phone_number,
+            email,
+            additional_info,
+            group_id // Обновляем группу студента
+        }, { new: true }).populate('group_id'); // Популяризация данных группы
+
+        res.json(updatedStudent); // Возвращаем обновлённого студента с данными группы
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Ошибка при обновлении данных студента.');
+    }
+});
+
+
+
+
+
+// Delete a student by ID
+app.delete('/students/:id', async (req, res) => {
+    const studentId = req.params.id;
+    
+    try {
+        await Student.findByIdAndDelete(studentId);
+        res.status(204).send(); // No content, indicates successful deletion
+    } catch (error) {
+        console.error('Error deleting student:', error);
+        res.status(500).send(error);
+    }
+});
+
+
+
+
+
+const teacherSchema = new mongoose.Schema({
+    full_name: {
+        type: String,
+        required: true, // Полное имя обязательно
+    },
+    login: {
+        type: String,
+        required: true, // Логин обязательно
+        unique: true,   // Логин должен быть уникальным
+    },
+    password: {
+        type: String,
+        required: true, // Пароль обязательно
+    },
+}, {
+    timestamps: true // Автоматическое добавление полей createdAt и updatedAt
+});
+
+// Создание модели для учителей
+const Teacher = mongoose.model('Teacher', teacherSchema);
+
+app.get('/teachers', async (req, res) => {
+    try {
+        const teachers = await Teacher.find();
+        res.render('teacher', { teachers });
+    } catch (error) {
+        console.error('Ошибка при получении учителей:', error);
+        res.status(500).send('Ошибка при получении учителей');
+    }
+});
+
+
+app.post('/teachers', async (req, res) => {
+    const { full_name, login, password } = req.body;
+
+    const newTeacher = new Teacher({
+        full_name,
+        login,
+        password
+    });
+
+    try {
+        const savedTeacher = await newTeacher.save();
+        res.status(201).json(savedTeacher);
+    } catch (error) {
+        console.error('Ошибка при добавлении учителя:', error);
+        res.status(500).send('Ошибка при добавлении учителя');
+    }
+});
+
+
+app.put('/teachers/:id', async (req, res) => {
+    const teacherId = req.params.id;
+    const { full_name, login, password } = req.body;
+
+    try {
+        const updatedTeacher = await Teacher.findByIdAndUpdate(teacherId, { full_name, login, password }, { new: true });
+        if (!updatedTeacher) {
+            return res.status(404).send('Учитель не найден.');
+        }
+        res.status(200).json(updatedTeacher);
+    } catch (error) {
+        console.error('Ошибка при редактировании учителя:', error);
+        res.status(500).send('Ошибка при редактировании учителя');
+    }
+});
+
+
+app.delete('/teachers/:id', async (req, res) => {
+    const teacherId = req.params.id;
+
+    try {
+        const deletedTeacher = await Teacher.findByIdAndDelete(teacherId);
+        if (!deletedTeacher) {
+            return res.status(404).send('Учитель не найден.');
+        }
+        res.status(200).send('Учитель успешно удален.');
+    } catch (error) {
+        console.error('Ошибка при удалении учителя:', error);
+        res.status(500).send('Ошибка при удалении учителя');
+    }
+});
+
+
+
