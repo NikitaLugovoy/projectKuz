@@ -371,28 +371,35 @@ app.delete('/students/:id', async (req, res) => {
 const teacherSchema = new mongoose.Schema({
     full_name: {
         type: String,
-        required: true, // Полное имя обязательно
+        required: true,
     },
     login: {
         type: String,
-        required: true, // Логин обязательно
-        unique: true,   // Логин должен быть уникальным
+        required: true,
+        unique: true,
     },
     password: {
         type: String,
-        required: true, // Пароль обязательно
+        required: true,
     },
+    group_id: {
+        type: mongoose.Schema.Types.ObjectId, // References a group
+        ref: 'Group', // Assuming you have a Group model
+        required: false, // Group is not mandatory initially
+    }
 }, {
-    timestamps: true // Автоматическое добавление полей createdAt и updatedAt
+    timestamps: true
 });
+
 
 // Создание модели для учителей
 const Teacher = mongoose.model('Teacher', teacherSchema);
 
 app.get('/teachers', async (req, res) => {
     try {
-        const teachers = await Teacher.find();
-        res.render('teacher', { teachers });
+        const teachers = await Teacher.find().populate('group_id'); // Populate the group info
+        const groups = await Group.find(); // Fetch available groups
+        res.render('teacher', { teachers, groups });
     } catch (error) {
         console.error('Ошибка при получении учителей:', error);
         res.status(500).send('Ошибка при получении учителей');
@@ -400,18 +407,21 @@ app.get('/teachers', async (req, res) => {
 });
 
 
+
 app.post('/teachers', async (req, res) => {
-    const { full_name, login, password } = req.body;
+    const { full_name, login, password, group_id } = req.body;
 
     const newTeacher = new Teacher({
         full_name,
         login,
-        password
+        password,
+        group_id
     });
 
     try {
         const savedTeacher = await newTeacher.save();
-        res.status(201).json(savedTeacher);
+        const populatedTeacher = await Teacher.findById(savedTeacher._id).populate('group_id'); // Популяризация через повторный запрос
+        res.status(201).json(populatedTeacher);
     } catch (error) {
         console.error('Ошибка при добавлении учителя:', error);
         res.status(500).send('Ошибка при добавлении учителя');
@@ -421,19 +431,27 @@ app.post('/teachers', async (req, res) => {
 
 app.put('/teachers/:id', async (req, res) => {
     const teacherId = req.params.id;
-    const { full_name, login, password } = req.body;
+    const { full_name, login, password, group_id } = req.body;
 
     try {
-        const updatedTeacher = await Teacher.findByIdAndUpdate(teacherId, { full_name, login, password }, { new: true });
+        const updatedTeacher = await Teacher.findByIdAndUpdate(
+            teacherId,
+            { full_name, login, password, group_id },
+            { new: true }
+        ).populate('group_id'); // Populate group_id
+
         if (!updatedTeacher) {
             return res.status(404).send('Учитель не найден.');
         }
+
         res.status(200).json(updatedTeacher);
     } catch (error) {
         console.error('Ошибка при редактировании учителя:', error);
         res.status(500).send('Ошибка при редактировании учителя');
     }
 });
+
+
 
 
 app.delete('/teachers/:id', async (req, res) => {
