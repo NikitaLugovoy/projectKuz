@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Электронный дневник - Публичные активности</title>
+    <!-- Подключение Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Подключение кастомного CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Навбар -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Логотип</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Личный кабинет</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Выход</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Контент страницы публичных активностей -->
+    <div class="container d-flex flex-column justify-content-center align-items-center vh-100">
+        <div class="text-center mb-4">
+            <h3>Публичные активности</h3>
+        </div>
+
+        <!-- Форма для добавления новой публичной активности -->
+        <form id="public-activity-form" class="mb-4">
+            <h4>Добавить новую публичную активность</h4>
+            <div class="mb-3">
+                <label for="student_id" class="form-label">Студент</label>
+                <select class="form-control" name="student_id" required>
+                    <option value="" disabled selected>Выберите студента</option>
+                    {{#each students}}
+                        <option value="{{this._id}}">{{this.username}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="participation_details" class="form-label">Детали участия</label>
+                <input type="text" class="form-control" name="participation_details" required>
+            </div>
+            <div class="mb-3">
+                <label for="has_pushkin_card" class="form-label">Наличие карточки Пушкина</label>
+                <select class="form-control" name="has_pushkin_card" required>
+                    <option value="" disabled selected>Выберите вариант</option>
+                    <option value="true">Да</option>
+                    <option value="false">Нет</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Добавить публичную активность</button>
+        </form>
+
+        <!-- Таблица публичных активностей -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Студент</th>
+                    <th>Детали участия</th>
+                    <th>Наличие карточки Пушкина</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody id="public-activity-table-body">
+    {{#each publicActivities}} <!-- Проход по публичным активностям -->
+    <tr id="public-activity-{{this._id}}">
+        <td class="student_name">{{this.student_id.username}}</td>
+        <td class="participation_details">{{this.participation_details}}</td>
+        <td class="has_pushkin_card">{{#if this.has_pushkin_card}}Да{{else}}Нет{{/if}}</td>
+        <td>
+            <button class="btn btn-warning edit-btn" data-id="{{this._id}}">Редактировать</button>
+            <button class="btn btn-danger delete-btn" data-id="{{this._id}}">Удалить</button>
+            <button class="btn btn-secondary cancel-btn" data-id="{{this._id}}" style="display:none;">Отмена</button>
+        </td>
+    </tr>
+    {{else}}
+    <tr>
+        <td colspan="4">Нет публичных активностей</td>
+    </tr>
+    {{/each}}
+</tbody>
+
+
+        </table>
+
+    </div>
+
+    <!-- Подключение Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Обработчик для добавления новой публичной активности
+    document.getElementById('public-activity-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Предотвращаем стандартное поведение формы
+
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        fetch('/publicactivities', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data) // Data now includes student_id
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Ошибка при добавлении публичной активности.");
+            return response.json();
+        })
+        .then(publicActivity => {
+            addPublicActivityRow(publicActivity); // Создание новой строки для таблицы публичных активностей
+            this.reset(); // Сбрасываем форму
+        })
+        .catch(error => {
+            console.error("Ошибка:", error);
+            alert("Произошла ошибка при добавлении публичной активности.");
+        });
+    });
+
+    // Функция для добавления строки публичной активности в таблицу
+    function addPublicActivityRow(publicActivity) {
+        const tableBody = document.getElementById('public-activity-table-body');
+        const newRow = document.createElement('tr');
+        newRow.id = `public-activity-${publicActivity._id}`;
+        newRow.innerHTML = `
+            <td class="student_name">${publicActivity.student_id.username}</td>
+            <td class="participation_details">${publicActivity.participation_details}</td>
+            <td class="has_pushkin_card">${publicActivity.has_pushkin_card ? 'Да' : 'Нет'}</td>
+            <td>
+                <button class="btn btn-warning edit-btn" data-id="${publicActivity._id}">Редактировать</button>
+                <button class="btn btn-danger delete-btn" data-id="${publicActivity._id}">Удалить</button>
+            </td>
+        `;
+        tableBody.appendChild(newRow); // Добавляем новую строку в таблицу
+        attachPublicActivityEventListeners(); // Добавляем обработчики событий для кнопок редактирования и удаления
+    }
+
+    document.querySelectorAll('.edit-public-activity-form').forEach(form => {
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Предотвращаем стандартное поведение формы
+
+        const publicActivityId = this.getAttribute('data-id');
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        fetch(`/publicactivities/${publicActivityId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data) // Data now includes student_id
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Ошибка при сохранении изменений публичной активности.");
+            return response.json(); // Возвращаем обновленную активность
+        })
+        .then(publicActivity => {
+            updatePublicActivityRow(publicActivity); // Обновление строки в таблице
+            alert("Публичная активность успешно обновлена!");
+            
+            // Скрываем форму редактирования после успешного обновления
+            const editForm = document.getElementById(`edit-form-${publicActivityId}`);
+            if (editForm) {
+                editForm.style.display = 'none'; // Скрываем форму редактирования
+            }
+        })
+        .catch(error => {
+            console.error("Ошибка:", error);
+            alert("Произошла ошибка при обновлении публичной активности.");
+        });
+    });
+});
+
+
+    // Функция для обновления строки публичной активности в таблице
+    // Функция для обновления строки публичной активности в таблице
+function updatePublicActivityRow(publicActivity) {
+    const row = document.getElementById(`public-activity-${publicActivity._id}`);
+    row.innerHTML = `
+        <td class="student_name">${publicActivity.student_id.username}</td>
+        <td class="participation_details">${publicActivity.participation_details}</td>
+        <td class="has_pushkin_card">${publicActivity.has_pushkin_card ? 'Да' : 'Нет'}</td>
+        <td>
+            <button class="btn btn-warning edit-btn" data-id="${publicActivity._id}">Редактировать</button>
+            <button class="btn btn-danger delete-btn" data-id="${publicActivity._id}">Удалить</button>
+        </td>
+    `;
+    
+    attachPublicActivityEventListeners(); // Присоединяем обработчики событий к обновленной строке
+}
+
+
+
+    function attachPublicActivityEventListeners() {
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const publicActivityId = this.getAttribute('data-id');
+        const row = document.getElementById(`public-activity-${publicActivityId}`);
+        
+        // Создаем HTML для формы редактирования
+        // Создаем HTML для формы редактирования
+const editFormHtml = `
+    <form class="d-flex edit-public-activity-form" data-id="${publicActivityId}">
+        <select name="student_id" class="form-control" required>
+            {{#each students}} <!-- Проход по всем студентам для выбора -->
+            <option value="{{this._id}}" {{#if (eq this._id "${publicActivity.student_id._id}")}}selected{{/if}}>{{this.username}}</option>
+            {{/each}}
+        </select>
+        <input type="text" name="participation_details" class="form-control" value="${row.querySelector('.participation_details').textContent}" required>
+        <select name="has_pushkin_card" class="form-control" required>
+            <option value="true" ${row.querySelector('.has_pushkin_card').textContent === 'Да' ? 'selected' : ''}>Да</option>
+            <option value="false" ${row.querySelector('.has_pushkin_card').textContent === 'Нет' ? 'selected' : ''}>Нет</option>
+        </select>
+        <button type="submit" class="btn btn-success">Сохранить</button>
+        <button type="button" class="btn btn-secondary cancel-btn" data-id="${publicActivityId}">Отмена</button>
+    </form>
+`;
+
+        
+        // Заменяем содержимое ячейки на форму редактирования
+        row.innerHTML = `
+            <td colspan="4">${editFormHtml}</td>
+        `;
+        
+        // Присоединяем обработчик к форме редактирования
+        row.querySelector('.edit-public-activity-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Предотвращаем стандартное поведение формы
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            fetch(`/publicactivities/${publicActivityId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data) // Data now includes student_id
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Ошибка при сохранении изменений публичной активности.");
+                return response.json(); // Возвращаем обновленную активность
+            })
+            .then(publicActivity => {
+                updatePublicActivityRow(publicActivity); // Обновление строки в таблице
+                alert("Публичная активность успешно обновлена!");
+            })
+            .catch(error => {
+                console.error("Ошибка:", error);
+                alert("Произошла ошибка при обновлении публичной активности.");
+            });
+        });
+    });
+});
+
+    });
+
+    document.querySelectorAll('.cancel-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const publicActivityId = this.getAttribute('data-id');
+            document.getElementById(`edit-form-${publicActivityId}`).style.display = 'none'; // Скрываем форму редактирования
+        });
+    });
+
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const publicActivityId = this.getAttribute('data-id');
+
+            if (confirm("Вы уверены, что хотите удалить эту публичную активность?")) {
+                fetch(`/publicactivities/${publicActivityId}`, {
+                    method: 'DELETE',
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error("Ошибка при удалении публичной активности.");
+                    document.getElementById(`public-activity-${publicActivityId}`).remove(); // Удаляем строку из таблицы
+                    alert("Публичная активность успешно удалена!");
+                })
+                .catch(error => {
+                    console.error("Ошибка:", error);
+                    alert("Произошла ошибка при удалении публичной активности.");
+                });
+            }
+        });
+    });
+}
+
+
+    // Присоединяем обработчики событий к кнопкам при загрузке страницы
+    document.addEventListener('DOMContentLoaded', attachPublicActivityEventListeners);
+
+    </script>
+</body>
+</html>

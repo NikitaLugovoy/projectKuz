@@ -162,79 +162,75 @@ app.delete('/groups/:id', async (req, res) => {
 });
 
 
-// Схема достижений
 let achievementSchema = new mongoose.Schema({
     achievement_details: {
         type: String,
-        required: true, // Обязательное поле для деталей достижения
+        required: true, // Required field for achievement details
     },
-    students: [{
+    student_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Student', // Ссылка на коллекцию студентов
-        required: false // Это поле не обязательно, может быть пустым
-    }]
+        ref: 'Student' // Reference to the Student model
+    }
 });
 
 // Создание модели для достижений
 let Achievement = mongoose.model('Achievement', achievementSchema);
-
+// Получение всех достижений
+// Получение всех достижений
 app.get('/achievements', async (req, res) => {
     try {
-        const achievements = await Achievement.find().populate('students'); // Заполняем студентов
-        const students = await Student.find(); // Получаем всех студентов для отображения в форме
-
-        res.render('achievements', { achievements, students }); // Передаем достижения и студентов в шаблон
+        const achievements = await Achievement.find().populate('student_id'); // Популяция студента
+        console.log('Достижения:', achievements);
+        res.render('achievements', { achievements, students: await Student.find() }); // Передаем достижения и студентов в шаблон
     } catch (error) {
         console.error('Ошибка при получении достижений:', error);
         res.status(500).send('Ошибка при получении достижений');
     }
 });
 
-
-// Create a new achievement
-// Create a new achievement with students
+// Добавление нового достижения с привязкой к студенту
 app.post('/achievements', async (req, res) => {
-    const { achievement_details, students } = req.body;
+    const { achievement_details, student_id } = req.body; // Извлекаем student_id
 
     const newAchievement = new Achievement({
         achievement_details,
-        students // массив с ObjectID студентов
+        student_id // Привязываем достижение к студенту
     });
 
     try {
         const savedAchievement = await newAchievement.save();
+        await savedAchievement.populate('student_id'); // Populate the student_id
         res.status(201).json(savedAchievement);
     } catch (error) {
         console.error('Ошибка при добавлении достижения:', error);
         res.status(500).send('Ошибка при добавлении достижения');
     }
 });
-
-// Update an achievement with new students
+// Обновление достижения с новым студентом
 app.put('/achievements/:id', async (req, res) => {
     const achievementId = req.params.id;
-    const { achievement_details, students } = req.body;
+    const { achievement_details, student_id } = req.body; // Извлекаем данные из запроса
 
     try {
+        // Находим и обновляем достижение
         const updatedAchievement = await Achievement.findByIdAndUpdate(
             achievementId,
-            { achievement_details, students },
-            { new: true }
-        );
+            { achievement_details, student_id }, // Обновляем достижение и студента
+            { new: true, runValidators: true } // Возвращаем новое значение и включаем валидацию
+        ).populate('student_id'); // Популяция студента
 
         if (!updatedAchievement) {
             return res.status(404).send('Достижение не найдено.');
         }
 
-        res.status(200).json(updatedAchievement);
+        res.status(200).json(updatedAchievement); // Возвращаем обновлённое достижение
     } catch (error) {
         console.error('Ошибка при редактировании достижения:', error);
         res.status(500).send('Ошибка при редактировании достижения');
     }
 });
 
-
-// Delete an achievement
+// Удаление достижения
 app.delete('/achievements/:id', async (req, res) => {
     const achievementId = req.params.id;
 
@@ -481,4 +477,93 @@ app.delete('/teachers/:id', async (req, res) => {
 });
 
 
+// Определение схемы для публичных активностей
+let publicActivitySchema = new mongoose.Schema({
+    participation_details: {
+        type: String,
+        required: true // Обязательное поле для деталей участия
+    },
+    student_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Student' // Ссылка на модель студента
+    },
+    has_pushkin_card: {
+        type: Boolean,
+        required: true // Обязательное поле для наличия карточки
+    }
+});
 
+// Создание модели для публичных активностей
+let PublicActivity = mongoose.model('PublicActivity', publicActivitySchema);
+
+// Получение всех публичных активностей
+app.get('/publicactivities', async (req, res) => {
+    try {
+        const publicActivities = await PublicActivity.find().populate('student_id'); // Популяция студента
+        console.log('Публичные активности:', publicActivities);
+        res.render('publicactivities', { publicActivities, students: await Student.find() }); // Передаем активности и студентов в шаблон
+    } catch (error) {
+        console.error('Ошибка при получении публичных активностей:', error);
+        res.status(500).send('Ошибка при получении публичных активностей');
+    }
+});
+
+// Добавление новой публичной активности с привязкой к студенту
+app.post('/publicactivities', async (req, res) => {
+    const { participation_details, student_id, has_pushkin_card } = req.body; // Извлекаем данные
+
+    const newPublicActivity = new PublicActivity({
+        participation_details,
+        student_id, // Привязываем активность к студенту
+        has_pushkin_card // Указываем наличие карточки
+    });
+
+    try {
+        const savedPublicActivity = await newPublicActivity.save();
+        await savedPublicActivity.populate('student_id'); // Популяция student_id
+        res.status(201).json(savedPublicActivity);
+    } catch (error) {
+        console.error('Ошибка при добавлении публичной активности:', error);
+        res.status(500).send('Ошибка при добавлении публичной активности');
+    }
+});
+
+// Обновление публичной активности с новым студентом
+app.put('/publicactivities/:id', async (req, res) => {
+    const publicActivityId = req.params.id;
+    const { participation_details, student_id, has_pushkin_card } = req.body; // Извлекаем данные из запроса
+
+    try {
+        // Находим и обновляем активность
+        const updatedPublicActivity = await PublicActivity.findByIdAndUpdate(
+            publicActivityId,
+            { participation_details, student_id, has_pushkin_card }, // Обновляем детали активности и студента
+            { new: true, runValidators: true } // Возвращаем новое значение и включаем валидацию
+        ).populate('student_id'); // Популяция студента
+
+        if (!updatedPublicActivity) {
+            return res.status(404).send('Публичная активность не найдена.');
+        }
+
+        res.status(200).json(updatedPublicActivity); // Возвращаем обновлённую активность
+    } catch (error) {
+        console.error('Ошибка при редактировании публичной активности:', error);
+        res.status(500).send('Ошибка при редактировании публичной активности');
+    }
+});
+
+// Удаление публичной активности
+app.delete('/publicactivities/:id', async (req, res) => {
+    const publicActivityId = req.params.id;
+
+    try {
+        const deletedPublicActivity = await PublicActivity.findByIdAndDelete(publicActivityId);
+        if (!deletedPublicActivity) {
+            return res.status(404).send('Публичная активность не найдена.');
+        }
+        res.status(200).send('Публичная активность успешно удалена.');
+    } catch (error) {
+        console.error('Ошибка при удалении публичной активности:', error);
+        res.status(500).send('Ошибка при удалении публичной активности.');
+    }
+});
