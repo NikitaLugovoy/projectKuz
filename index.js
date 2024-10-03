@@ -167,7 +167,12 @@ let achievementSchema = new mongoose.Schema({
     achievement_details: {
         type: String,
         required: true, // Обязательное поле для деталей достижения
-    }
+    },
+    students: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Student', // Ссылка на коллекцию студентов
+        required: false // Это поле не обязательно, может быть пустым
+    }]
 });
 
 // Создание модели для достижений
@@ -175,20 +180,25 @@ let Achievement = mongoose.model('Achievement', achievementSchema);
 
 app.get('/achievements', async (req, res) => {
     try {
-        const achievements = await Achievement.find();
-        res.render('achievements', { achievements }); // Render the HBS template with achievements data
+        const achievements = await Achievement.find().populate('students'); // Заполняем студентов
+        const students = await Student.find(); // Получаем всех студентов для отображения в форме
+
+        res.render('achievements', { achievements, students }); // Передаем достижения и студентов в шаблон
     } catch (error) {
         console.error('Ошибка при получении достижений:', error);
         res.status(500).send('Ошибка при получении достижений');
     }
 });
 
+
 // Create a new achievement
+// Create a new achievement with students
 app.post('/achievements', async (req, res) => {
-    const { achievement_details } = req.body;
+    const { achievement_details, students } = req.body;
 
     const newAchievement = new Achievement({
-        achievement_details
+        achievement_details,
+        students // массив с ObjectID студентов
     });
 
     try {
@@ -200,15 +210,15 @@ app.post('/achievements', async (req, res) => {
     }
 });
 
-// Update an achievement
+// Update an achievement with new students
 app.put('/achievements/:id', async (req, res) => {
     const achievementId = req.params.id;
-    const { achievement_details } = req.body;
+    const { achievement_details, students } = req.body;
 
     try {
         const updatedAchievement = await Achievement.findByIdAndUpdate(
             achievementId,
-            { achievement_details },
+            { achievement_details, students },
             { new: true }
         );
 
@@ -222,6 +232,7 @@ app.put('/achievements/:id', async (req, res) => {
         res.status(500).send('Ошибка при редактировании достижения');
     }
 });
+
 
 // Delete an achievement
 app.delete('/achievements/:id', async (req, res) => {

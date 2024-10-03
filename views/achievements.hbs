@@ -42,94 +42,125 @@
 
         <!-- Форма для добавления нового достижения -->
         <form id="achievement-form" class="mb-4">
-            <h4>Добавить новое достижение</h4>
-            <div class="mb-3">
-                <label for="achievement_details" class="form-label">Детали достижения</label>
-                <input type="text" class="form-control" name="achievement_details" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Добавить достижение</button>
-        </form>
+    <h4>Добавить новое достижение</h4>
+    <div class="mb-3">
+        <label for="achievement_details" class="form-label">Детали достижения</label>
+        <input type="text" class="form-control" name="achievement_details" required>
+    </div>
+    <div class="mb-3">
+        <label for="students" class="form-label">Выберите студентов</label>
+        <select name="students" class="form-select" >
+            {{#each students}}
+            <option value="{{this._id}}">{{this.username}}</option>
+            {{/each}}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Добавить достижение</button>
+</form>
 
         <!-- Таблица достижений -->
-        <table class="table table-bordered text-center">
-            <thead class="table-light">
-                <tr>
-                    <th scope="col">Детали достижения</th>
-                    <th scope="col">Действия</th>
-                </tr>
-            </thead>
-            <tbody id="achievement-table-body">
-                {{#each achievements}}
-                <tr id="achievement-{{this._id}}">
-                    <td class="achievement_details">{{this.achievement_details}}</td>
-                    <td>
-                        <button class="btn btn-warning edit-btn" data-id="{{this._id}}">Редактировать</button>
-                        <button class="btn btn-danger delete-btn" data-id="{{this._id}}">Удалить</button>
-                    </td>
-                </tr>
-                <tr id="edit-form-{{this._id}}" class="edit-form" style="display: none;">
-                    <td colspan="2">
-                        <form class="d-flex edit-achievement-form" data-id="{{this._id}}">
-                            <input type="text" name="achievement_details" class="form-control" value="{{this.achievement_details}}" required>
-                            <button type="submit" class="btn btn-success">Сохранить</button>
-                            <button type="button" class="btn btn-secondary cancel-btn" data-id="{{this._id}}">Отмена</button>
-                        </form>
-                    </td>
-                </tr>
-                {{else}}
-                <tr>
-                    <td colspan="2">Нет достижений</td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
+        <!-- Таблица достижений -->
+<table class="table table-bordered text-center">
+    <thead class="table-light">
+        <tr>
+            <th scope="col">Студент</th>
+            <th scope="col">Детали достижения</th>
+            <th scope="col">Действия</th>
+        </tr>
+    </thead>
+    <tbody id="achievement-table-body">
+        {{#each achievements}}
+        <tr id="achievement-{{this._id}}">
+            <td class="student_name">{{this.students.username}}</td>
+            <td class="achievement_details">{{this.achievement_details}}</td>
+            <td>
+                <button class="btn btn-warning edit-btn" data-id="{{this._id}}">Редактировать</button>
+                <button class="btn btn-danger delete-btn" data-id="{{this._id}}">Удалить</button>
+            </td>
+        </tr>
+        <tr id="edit-form-{{this._id}}" class="edit-form" style="display: none;">
+            <td>
+                <select class="form-select" name="student_id" required>
+                    {{#each ../students}}
+                        <option value="{{this._id}}" {{#if (eq this._id ../student_id)}}selected{{/if}}>{{this.username}}</option>
+                    {{/each}}
+                </select>
+            </td>
+            <td colspan="2">
+                <form class="d-flex edit-achievement-form" data-id="{{this._id}}">
+                    <input type="text" name="achievement_details" class="form-control" value="{{this.achievement_details}}" required>
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                    <button type="button" class="btn btn-secondary cancel-btn" data-id="{{this._id}}">Отмена</button>
+                </form>
+            </td>
+        </tr>
+        {{else}}
+        <tr>
+            <td colspan="3">Нет достижений</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
     </div>
 
     <!-- Подключение Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // JavaScript для обработки добавления достижения
-        document.getElementById('achievement-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Предотвращаем стандартное поведение формы
+    // JavaScript для обработки добавления достижения
+    document.getElementById('achievement-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Предотвращаем стандартное поведение формы
 
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData.entries());
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
 
-            fetch('/achievements', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error("Ошибка при добавлении достижения.");
-                }
-            })
-            .then(achievement => {
-                // Создание новой строки для таблицы достижений
-                const tableBody = document.getElementById('achievement-table-body');
-                const newRow = document.createElement('tr');
-                newRow.id = `achievement-${achievement._id}`;
-                newRow.innerHTML = `
-                    <td class="achievement_details">${achievement.achievement_details}</td>
-                    <td>
-                        <button class="btn btn-warning edit-btn" data-id="${achievement._id}">Редактировать</button>
-                        <button class="btn btn-danger delete-btn" data-id="${achievement._id}">Удалить</button>
-                    </td>
-                `;
-                tableBody.appendChild(newRow); // Добавляем новую строку в таблицу
-                this.reset(); // Сбрасываем форму
-            })
-            .catch(error => {
-                console.error("Ошибка:", error);
-                alert("Произошла ошибка при добавлении достижения.");
-            });
+        fetch('/achievements', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Ошибка при добавлении достижения.");
+            }
+        })
+        .then(achievement => {
+            // Создание новой строки для таблицы достижений
+            const tableBody = document.getElementById('achievement-table-body');
+            const newRow = document.createElement('tr');
+            newRow.id = `achievement-${achievement._id}`;
+            newRow.innerHTML = `
+                <td class="student_name">
+                    {{#each students}} <!-- Проходим по всем студентам -->
+                        {{#if (eq this._id achievement.student_id)}}
+                            {{this.username}} <!-- Отображаем имя студента -->
+                        {{/if}}
+                    {{/each}}
+                </td>
+                <td class="achievement_details">${achievement.achievement_details}</td>
+                <td>
+                    <button class="btn btn-warning edit-btn" data-id="${achievement._id}">Редактировать</button>
+                    <button class="btn btn-danger delete-btn" data-id="${achievement._id}">Удалить</button>
+                </td>
+            `;
+            tableBody.appendChild(newRow); // Добавляем новую строку в таблицу
+            this.reset(); // Сбрасываем форму
+
+            // Добавляем обработчики событий для кнопок редактирования и удаления
+            attachAchievementEventListeners(); 
+        })
+        .catch(error => {
+            console.error("Ошибка:", error);
+            alert("Произошла ошибка при добавлении достижения.");
         });
+    });
 
+    // Функция для прикрепления обработчиков событий к кнопкам редактирования и удаления
+    function attachAchievementEventListeners() {
         // JavaScript для обработки редактирования достижений
         document.querySelectorAll('.edit-btn').forEach(button => {
             button.addEventListener('click', function() {
@@ -172,43 +203,48 @@
                 }
             });
         });
+    }
 
-        // JavaScript для сохранения изменений достижения
-        document.querySelectorAll('.edit-achievement-form').forEach(form => {
-            form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Предотвращаем стандартное поведение формы
+    // JavaScript для сохранения изменений достижения
+    document.querySelectorAll('.edit-achievement-form').forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Предотвращаем стандартное поведение формы
 
-                const achievementId = this.getAttribute('data-id');
-                const formData = new FormData(this);
-                const data = Object.fromEntries(formData.entries());
+            const achievementId = this.getAttribute('data-id');
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
 
-                fetch(`/achievements/${achievementId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error("Ошибка при сохранении изменений достижения.");
-                    }
-                })
-                .then(achievement => {
-                    // Обновляем строку в таблице
-                    const row = document.getElementById(`achievement-${achievementId}`);
-                    row.querySelector('.achievement_details').textContent = achievement.achievement_details;
-                    document.getElementById(`edit-form-${achievementId}`).style.display = 'none'; // Скрываем форму редактирования
-                    row.style.display = 'table-row'; // Показываем обновленную строку
-                })
-                .catch(error => {
-                    console.error("Ошибка:", error);
-                    alert("Произошла ошибка при сохранении изменений достижения.");
-                });
+            fetch(`/achievements/${achievementId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Ошибка при сохранении изменений достижения.");
+                }
+            })
+            .then(achievement => {
+                // Обновляем строку в таблице
+                const row = document.getElementById(`achievement-${achievementId}`);
+                row.querySelector('.achievement_details').textContent = achievement.achievement_details;
+                document.getElementById(`edit-form-${achievementId}`).style.display = 'none'; // Скрываем форму редактирования
+                row.style.display = 'table-row'; // Показываем обновленную строку
+            })
+            .catch(error => {
+                console.error("Ошибка:", error);
+                alert("Произошла ошибка при сохранении изменений достижения.");
             });
         });
-    </script>
+    });
+
+    // Прикрепляем обработчики событий к уже существующим достижениям
+    attachAchievementEventListeners();
+</script>
+
 </body>
 </html>
