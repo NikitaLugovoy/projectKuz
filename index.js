@@ -567,3 +567,174 @@ app.delete('/publicactivities/:id', async (req, res) => {
         res.status(500).send('Ошибка при удалении публичной активности.');
     }
 });
+
+
+// Определение схемы для категорий
+let categorySchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true // Обязательное поле для названия категории
+    }
+});
+
+// Создание модели для категорий
+let Category = mongoose.model('Category', categorySchema);
+
+// Получение всех категорий
+app.get('/categories', async (req, res) => {
+    try {
+        const categories = await Category.find(); // Получаем все категории
+        console.log('Категории:', categories);
+        res.render('categories', { categories }); // Передаем категории в шаблон
+    } catch (error) {
+        console.error('Ошибка при получении категорий:', error);
+        res.status(500).send('Ошибка при получении категорий');
+    }
+});
+
+// Добавление новой категории
+app.post('/categories', async (req, res) => {
+    const { name } = req.body; // Извлекаем название категории
+
+    const newCategory = new Category({
+        name // Создаем новую категорию
+    });
+
+    try {
+        const savedCategory = await newCategory.save();
+        res.status(201).json(savedCategory); // Возвращаем сохранённую категорию
+    } catch (error) {
+        console.error('Ошибка при добавлении категории:', error);
+        res.status(500).send('Ошибка при добавлении категории');
+    }
+});
+
+// Обновление категории по ID
+app.put('/categories/:id', async (req, res) => {
+    const categoryId = req.params.id;
+    const { name } = req.body; // Извлекаем название категории
+
+    try {
+        // Находим и обновляем категорию
+        const updatedCategory = await Category.findByIdAndUpdate(
+            categoryId,
+            { name }, // Обновляем название категории
+            { new: true, runValidators: true } // Возвращаем новое значение и включаем валидацию
+        );
+
+        if (!updatedCategory) {
+            return res.status(404).send('Категория не найдена.');
+        }
+
+        res.status(200).json(updatedCategory); // Возвращаем обновлённую категорию
+    } catch (error) {
+        console.error('Ошибка при редактировании категории:', error);
+        res.status(500).send('Ошибка при редактировании категории');
+    }
+});
+
+// Удаление категории
+app.delete('/categories/:id', async (req, res) => {
+    const categoryId = req.params.id;
+
+    try {
+        const deletedCategory = await Category.findByIdAndDelete(categoryId);
+        if (!deletedCategory) {
+            return res.status(404).send('Категория не найдена.');
+        }
+        res.status(200).send('Категория успешно удалена.');
+    } catch (error) {
+        console.error('Ошибка при удалении категории:', error);
+        res.status(500).send('Ошибка при удалении категории.');
+    }
+});
+
+
+
+// Определение схемы для частей
+const partSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true, // Обязательное поле для названия части
+    },
+    category_id: {
+        type: mongoose.Schema.Types.ObjectId, // Ссылка на категорию
+        ref: 'Category', // Предполагается, что у вас есть модель Category
+        required: false, // Связь с категорией не обязательна
+    }
+}, {
+    timestamps: true // Добавляет поля createdAt и updatedAt
+});
+
+// Создание модели для частей
+const Part = mongoose.model('Part', partSchema);
+
+// Получение всех частей
+app.get('/parts', async (req, res) => {
+    try {
+        const parts = await Part.find().populate('category_id'); // Заполнение информации о категории
+        const categories = await Category.find(); // Получение доступных категорий
+        res.render('parts', { parts, categories }); // Передача частей и категорий в шаблон
+    } catch (error) {
+        console.error('Ошибка при получении частей:', error);
+        res.status(500).send('Ошибка при получении частей');
+    }
+});
+
+// Добавление новой части
+app.post('/parts', async (req, res) => {
+    const { title, category_id } = req.body; // Извлечение данных из тела запроса
+
+    const newPart = new Part({
+        title,
+        category_id
+    });
+
+    try {
+        const savedPart = await newPart.save(); // Сохранение новой части
+        const populatedPart = await Part.findById(savedPart._id).populate('category_id'); // Повторный запрос для заполнения информации о категории
+        res.status(201).json(populatedPart); // Возврат сохраненной части
+    } catch (error) {
+        console.error('Ошибка при добавлении части:', error);
+        res.status(500).send('Ошибка при добавлении части');
+    }
+});
+
+// Обновление части по ID
+app.put('/parts/:id', async (req, res) => {
+    const partId = req.params.id; // Получение ID части из параметров
+    const { title, category_id } = req.body; // Извлечение данных из тела запроса
+
+    try {
+        const updatedPart = await Part.findByIdAndUpdate(
+            partId,
+            { title, category_id }, // Обновление названия и категории
+            { new: true } // Возврат обновленного значения
+        ).populate('category_id'); // Заполнение информации о категории
+
+        if (!updatedPart) {
+            return res.status(404).send('Часть не найдена.');
+        }
+
+        res.status(200).json(updatedPart); // Возврат обновленной части
+    } catch (error) {
+        console.error('Ошибка при редактировании части:', error);
+        res.status(500).send('Ошибка при редактировании части');
+    }
+});
+
+// Удаление части
+app.delete('/parts/:id', async (req, res) => {
+    const partId = req.params.id; // Получение ID части из параметров
+
+    try {
+        const deletedPart = await Part.findByIdAndDelete(partId); // Удаление части
+        if (!deletedPart) {
+            return res.status(404).send('Часть не найдена.');
+        }
+        res.status(200).send('Часть успешно удалена.'); // Успешное удаление
+    } catch (error) {
+        console.error('Ошибка при удалении части:', error);
+        res.status(500).send('Ошибка при удалении части.');
+    }
+});

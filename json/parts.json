@@ -1,0 +1,16 @@
+[{
+  "_id": {
+    "$oid": "66fe909579cf8e0f51c770fc"
+  },
+  "title": "zxc",
+  "category_id": {
+    "$oid": "66fe8e9eb0bb8b382214dabe"
+  },
+  "createdAt": {
+    "$date": "2024-10-03T12:39:49.055Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-03T12:39:49.055Z"
+  },
+  "__v": 0
+}]

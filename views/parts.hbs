@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Электронный дневник - Части</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Навбар -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Логотип</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Личный кабинет</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Выход</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container d-flex flex-column justify-content-center align-items-center vh-100">
+        <div class="text-center mb-4">
+            <h3>Части</h3>
+        </div>
+
+        <!-- Форма для добавления новой части -->
+        <form id="part-form" class="mb-4">
+            <h4>Добавить новую часть</h4>
+            <div class="mb-3">
+                <label for="title" class="form-label">Название мероприятия</label>
+                <input type="text" class="form-control" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">Категория</label>
+                <select name="category_id" class="form-control">
+                    {{#each categories}}
+                    <option value="{{this._id}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Добавить часть</button>
+        </form>
+
+        <!-- Таблица частей -->
+        <table class="table table-bordered text-center">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Название мероприятия</th>
+                    <th scope="col">Категория</th>
+                    <th scope="col">Действия</th>
+                </tr>
+            </thead>
+            <tbody id="part-table-body">
+                {{#each parts}}
+                <tr id="part-{{this._id}}">
+                    <td class="title">{{this.title}}</td>
+                    <td class="category">{{this.category_id.name}}</td>
+                    <td>
+                        <button class="btn btn-warning edit-btn" data-id="{{this._id}}">Редактировать</button>
+                        <button class="btn btn-danger delete-btn" data-id="{{this._id}}">Удалить</button>
+                    </td>
+                </tr>
+                <tr id="edit-form-{{this._id}}" class="edit-form" style="display: none;">
+                    <td colspan="3">
+                        <form class="d-flex edit-part-form" data-id="{{this._id}}">
+                            <input type="text" name="title" class="form-control" value="{{this.title}}" required>
+                            <select name="category_id" class="form-control">
+                                {{#each ../categories}} <!-- Проход по всем категориям для выбора -->
+                                <option value="{{this._id}}" {{#if (eq this._id ../category_id)}}selected{{/if}}>{{this.name}}</option>
+                                {{/each}}
+                            </select>
+                            <button type="submit" class="btn btn-success">Сохранить</button>
+                            <button type="button" class="btn btn-secondary cancel-btn" data-id="{{this._id}}">Отмена</button>
+                        </form>
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="3">Нет частей</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // JavaScript для обработки добавления части
+        document.getElementById('part-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Предотвращаем стандартное поведение формы
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            fetch('/parts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Ошибка при добавлении части.");
+                }
+            })
+            .then(part => {
+                // Создание новой строки для таблицы частей
+                const tableBody = document.getElementById('part-table-body');
+                const newRow = document.createElement('tr');
+                newRow.id = `part-${part._id}`;
+                newRow.innerHTML = `
+                    <td class="title">${part.title}</td>
+                    <td class="category">${part.category_id.name}</td>
+                    <td>
+                        <button class="btn btn-warning edit-btn" data-id="${part._id}">Редактировать</button>
+                        <button class="btn btn-danger delete-btn" data-id="${part._id}">Удалить</button>
+                    </td>
+                `;
+                tableBody.appendChild(newRow); // Добавляем новую строку в таблицу
+                this.reset(); // Сбрасываем форму
+            })
+            .catch(error => {
+                console.error("Ошибка:", error);
+                alert("Произошла ошибка при добавлении части.");
+            });
+        });
+
+        // JavaScript для обработки редактирования частей
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const partId = this.getAttribute('data-id');
+                document.getElementById(`edit-form-${partId}`).style.display = 'table-row';
+                document.getElementById(`part-${partId}`).style.display = 'none';
+            });
+        });
+
+        document.querySelectorAll('.cancel-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const partId = this.getAttribute('data-id');
+                document.getElementById(`edit-form-${partId}`).style.display = 'none';
+                document.getElementById(`part-${partId}`).style.display = 'table-row';
+            });
+        });
+
+        // JavaScript для удаления части
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const partId = this.getAttribute('data-id');
+                if (confirm("Вы уверены, что хотите удалить эту часть?")) {
+                    fetch(`/parts/${partId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            document.getElementById(`part-${partId}`).remove(); // Удаляем строку таблицы
+                        } else {
+                            alert("Ошибка при удалении части.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Ошибка:", error);
+                        alert("Произошла ошибка при удалении части.");
+                    });
+                }
+            });
+        });
+
+        // JavaScript для сохранения изменений части
+        document.querySelectorAll('.edit-part-form').forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Предотвращаем стандартное поведение формы
+
+                const partId = this.getAttribute('data-id');
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData.entries());
+
+                fetch(`/parts/${partId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error("Ошибка при сохранении изменений части.");
+                    }
+                })
+                .then(part => {
+                    // Обновляем строку в таблице, включая категорию
+                    const row = document.getElementById(`part-${partId}`);
+                    row.querySelector('.title').textContent = part.title;
+                    row.querySelector('.category').textContent = part.category_id.name; // Обновляем название категории
+                    document.getElementById(`edit-form-${partId}`).style.display = 'none'; // Скрываем форму редактирования
+                    row.style.display = 'table-row'; // Показываем обновленную строку
+                })
+                .catch(error => {
+                    console.error("Ошибка:", error);
+                    alert("Произошла ошибка при сохранении изменений части.");
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -2,5 +2,154 @@
   "_id": {
     "$oid": "6505d7b2a5b8f9a6b6d4f123"
   },
-  "achievement_details": "Achievement details"
+  "achievement_details": "Achievement details",
+  "student_id": {
+    "$oid": "6504b6b565d4f9e6e4e5b0a3"
+  }
+},
+{
+  "_id": {
+    "$oid": "66fe53f5eeda322e2a64036d"
+  },
+  "achievement_details": "xZXzxc",
+  "students": [
+    {
+      "$oid": "66fd1792a053be86e828666c"
+    }
+  ],
+  "__v": 0,
+  "student_id": {
+    "$oid": "66fba34d398a1a215e734073"
+  }
+},
+{
+  "_id": {
+    "$oid": "66fe55f8eeda322e2a64037e"
+  },
+  "achievement_details": "ячсячвсвс",
+  "students": [
+    {
+      "$oid": "6504b6b565d4f9e6e4e5b0a3"
+    }
+  ],
+  "__v": 0,
+  "student_id": {
+    "$oid": "66fd1792a053be86e828666c"
+  }
+},
+{
+  "_id": {
+    "$oid": "66fe55fceeda322e2a640380"
+  },
+  "achievement_details": "ячсяч",
+  "students": [
+    {
+      "$oid": "66fba34d398a1a215e734073"
+    }
+  ],
+  "__v": 0,
+  "student_id": {
+    "$oid": "66fd175ca053be86e8286664"
+  }
+},
+{
+  "_id": {
+    "$oid": "66fe55feeeda322e2a640382"
+  },
+  "achievement_details": "ячсяч",
+  "students": [
+    {
+      "$oid": "66fd182b9fedcd0ecb0d7d6e"
+    }
+  ],
+  "__v": 0,
+  "student_id": {
+    "$oid": "6504b6b565d4f9e6e4e5b0a3"
+  }
+},
+{
+  "_id": {
+    "$oid": "66fe5609eeda322e2a640387"
+  },
+  "achievement_details": "ясч",
+  "students": [
+    {
+      "$oid": "6504b6b565d4f9e6e4e5b0a3"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe56b7eeda322e2a640391"
+  },
+  "achievement_details": "фсчячс",
+  "students": [
+    {
+      "$oid": "66fd1792a053be86e828666c"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe571feeda322e2a640399"
+  },
+  "achievement_details": "ясчс",
+  "students": [
+    {
+      "$oid": "66fd00bb3be252c13ea21ac5"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe7ac022d0c1ecdb9f6402"
+  },
+  "achievement_details": "сыс",
+  "student_id": {
+    "$oid": "66fd1792a053be86e828666c"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe7aca22d0c1ecdb9f6408"
+  },
+  "achievement_details": "ссс",
+  "student_id": {
+    "$oid": "66fd182b9fedcd0ecb0d7d6e"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe7ad622d0c1ecdb9f640e"
+  },
+  "achievement_details": "яяяяяяяяяя",
+  "student_id": {
+    "$oid": "66fd1740a053be86e828665f"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe7bdb22d0c1ecdb9f6423"
+  },
+  "achievement_details": "ыыы",
+  "student_id": {
+    "$oid": "66fd1792a053be86e828666c"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe7c1a22d0c1ecdb9f6434"
+  },
+  "achievement_details": "сссссс",
+  "student_id": {
+    "$oid": "66fe3d1793d147b975d25b67"
+  },
+  "__v": 0
 }]

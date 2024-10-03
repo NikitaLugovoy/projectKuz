@@ -4,5 +4,137 @@
   },
   "full_name": "Teacher Full Name",
   "login": "teacher_login",
-  "password": "teacher_password"
+  "password": "teacher_password",
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "updatedAt": {
+    "$date": "2024-10-03T06:39:15.480Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66fe3c0d35d4605410709703"
+  },
+  "full_name": "132123",
+  "login": "ммм",
+  "password": "ммм",
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "createdAt": {
+    "$date": "2024-10-03T06:39:09.603Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-03T06:42:08.546Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe3c3735d460541070970b"
+  },
+  "full_name": "42324",
+  "login": "23r23r",
+  "password": "2r32word",
+  "group_id": {
+    "$oid": "6504d8a7a5b8f9a6b6d4e130"
+  },
+  "createdAt": {
+    "$date": "2024-10-03T06:39:51.540Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-03T06:42:01.287Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe3ca8e1001cedea972bf0"
+  },
+  "full_name": "сячс",
+  "login": "ячс",
+  "password": "ячс",
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "createdAt": {
+    "$date": "2024-10-03T06:41:44.102Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-03T06:41:58.082Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe3cc6e1001cedea972bfe"
+  },
+  "full_name": "123123",
+  "login": "12312",
+  "password": "123",
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "createdAt": {
+    "$date": "2024-10-03T06:42:14.532Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-03T06:42:48.458Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe3cf993d147b975d25b5c"
+  },
+  "full_name": "zxc",
+  "login": "12312zxczx",
+  "password": "123xzczx",
+  "group_id": {
+    "$oid": "6504d8a7a5b8f9a6b6d4e130"
+  },
+  "createdAt": {
+    "$date": "2024-10-03T06:43:05.526Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-03T06:43:05.526Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe52f79218911c02bc9029"
+  },
+  "full_name": "ячсяч",
+  "login": "ячсяч",
+  "password": "123",
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "createdAt": {
+    "$date": "2024-10-03T08:16:55.822Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-03T08:16:55.822Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe533695e11cb86050da14"
+  },
+  "full_name": "сячс",
+  "login": "12312фвы",
+  "password": "123",
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "createdAt": {
+    "$date": "2024-10-03T08:17:58.629Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-03T08:18:06.673Z"
+  },
+  "__v": 0
 }]

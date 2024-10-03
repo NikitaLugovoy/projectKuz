@@ -5,15 +5,112 @@
   "username": "student_username",
   "phone_number": "123456789",
   "email": "student@example.com",
-  "additional_info": "Additional information"
+  "additional_info": "Additional information",
+  "group_id": {
+    "$oid": "6504d8a7a5b8f9a6b6d4e130"
+  }
 },
 {
   "_id": {
-    "$oid": "66fa934ac77140aa917b9b0d"
+    "$oid": "66fba34d398a1a215e734073"
   },
-  "username": "123",
-  "phone_number": "321",
-  "email": "12@1",
-  "additional_info": "у",
+  "username": "asd",
+  "phone_number": "ds",
+  "email": "ds@asd.asd",
+  "additional_info": "a",
+  "group_id": {
+    "$oid": "6504d8a7a5b8f9a6b6d4e130"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fd00bb3be252c13ea21ac5"
+  },
+  "username": "ы",
+  "phone_number": "с",
+  "email": "ASd@adsas.ASD",
+  "additional_info": "ads",
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fd1740a053be86e828665f"
+  },
+  "username": "й",
+  "phone_number": "й",
+  "email": "zxc@zxc.ZXc",
+  "additional_info": "cx",
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fd175ca053be86e8286664"
+  },
+  "username": "222",
+  "phone_number": "2222",
+  "email": "ww@ww.ww",
+  "additional_info": "wwww",
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fd1792a053be86e828666c"
+  },
+  "username": "czxc",
+  "phone_number": "cxc",
+  "email": "ppp@pp.pp",
+  "additional_info": "c",
+  "group_id": {
+    "$oid": "6504d8a7a5b8f9a6b6d4e130"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fd182b9fedcd0ecb0d7d6e"
+  },
+  "username": "ячс",
+  "phone_number": "чяс",
+  "email": "zxc@czxc.zxc",
+  "additional_info": "xc",
+  "group_id": {
+    "$oid": "6504d8a7a5b8f9a6b6d4e130"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fd189e9fedcd0ecb0d7d7b"
+  },
+  "username": "aaa",
+  "phone_number": "aaa",
+  "email": "aa@aa.a",
+  "additional_info": "aa",
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe3d1793d147b975d25b67"
+  },
+  "username": "asdddddddddddd",
+  "phone_number": "asd",
+  "email": "asd@asdas.asd",
+  "additional_info": "asd",
+  "group_id": {
+    "$oid": "6504d8a7a5b8f9a6b6d4e130"
+  },
   "__v": 0
 }]

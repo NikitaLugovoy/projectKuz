@@ -1,0 +1,33 @@
+[{
+  "_id": {
+    "$oid": "66fe8942054097a6c1ab5aea"
+  },
+  "participation_details": "чяссс",
+  "student_id": {
+    "$oid": "66fd175ca053be86e8286664"
+  },
+  "has_pushkin_card": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe8c4a054097a6c1ab5b1e"
+  },
+  "participation_details": "ячс",
+  "student_id": {
+    "$oid": "6504b6b565d4f9e6e4e5b0a3"
+  },
+  "has_pushkin_card": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66fe8ca3054097a6c1ab5b2e"
+  },
+  "participation_details": "яяяяяяяяяя",
+  "student_id": {
+    "$oid": "6504b6b565d4f9e6e4e5b0a3"
+  },
+  "has_pushkin_card": false,
+  "__v": 0
+}]
