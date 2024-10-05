@@ -12,24 +12,37 @@ app.listen(port, function () {
 app.use(express.json());
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
+app.use(express.urlencoded({ extended: true }));
+
 // Настройка БД
 let mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/events');
 
-// Схемы
-let eventSchema = new mongoose.Schema({
-    nickname: String,
-    password: String,
-    lastName: String,
-    firsName: String,
-    patronymic: String,
-    nationality: String,
-    birthday: Date,
-    group: String,
-    photo: String
+const teacherSchema = new mongoose.Schema({
+    full_name: {
+        type: String,
+        required: true,
+    },
+    login: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    group_id: {
+        type: mongoose.Schema.Types.ObjectId, // References a group
+        ref: 'Group', // Assuming you have a Group model
+        required: false, // Group is not mandatory initially
+    }
+}, {
+    timestamps: true
 });
 
-let Event = mongoose.model('user', eventSchema);
+// Создание модели для учителей
+const Teacher = mongoose.model('teachers', teacherSchema);
 
 const hbs = require('hbs');
 app.set('views', 'views');
@@ -50,37 +63,38 @@ app.post('/login', async (req, res) => {
     let login = req.body.login;
     let password = req.body.password;
     try {
-        let event = await Event.findOne({ login: login, password: password });
+        let teacher = await Teacher.findOne({ login: login, password: password });
+        console.log(teacher)
 
-        if (!event) {
-            res.render('login');
-        } else {
-            res.render('index', { event: event });
-        }
+        if (!teacher) {
+            return res.redirect('/'); // Используем return здесь
+        } 
+
+        return res.redirect('/parts'); // Используем return здесь, если нужно
     } catch (error) {
         console.error('Ошибка при выполнении запроса к базе данных:', error);
         res.status(500).send('Произошла ошибка при выполнении запроса к базе данных');
     }
 });
 
+
 app.get('/register', async (req, res) => {
     res.render('registr');
 });
 
 app.post('/register', async (req, res) => {
-    let nickname = req.body.nickname;
+    let full_name = req.body.full_name;
     let login = req.body.login;
     let password = req.body.password;
 
-    let event = new Event({
-        nickname: nickname,
+    let teacher = new Teacher({
+        full_name: full_name,
         login: login,
         password: password
     });
-    await event.save();
+    await teacher.save();
     res.redirect('/');
 });
-
 
 // Создание схемы для групп
 const groupSchema = new mongoose.Schema({
@@ -93,12 +107,8 @@ const groupSchema = new mongoose.Schema({
     timestamps: true // Автоматическое добавление полей createdAt и updatedAt
 });
 
-
-
 // Создание модели для групп
 const Group = mongoose.model('Group', groupSchema);
-
-
 
 // Get all groups
 app.get('/groups', async (req, res) => {
@@ -160,7 +170,6 @@ app.delete('/groups/:id', async (req, res) => {
         res.status(500).send('Ошибка при удалении группы');
     }
 });
-
 
 let achievementSchema = new mongoose.Schema({
     achievement_details: {
@@ -300,8 +309,6 @@ app.post('/students', async (req, res) => {
     }
 });
 
-
-
 // Read a single student by ID
 app.get('/students/:id', async (req, res) => {
     try {
@@ -354,10 +361,6 @@ app.put('/students/:id', async (req, res) => {
     }
 });
 
-
-
-
-
 // Delete a student by ID
 app.delete('/students/:id', async (req, res) => {
     const studentId = req.params.id;
@@ -373,35 +376,6 @@ app.delete('/students/:id', async (req, res) => {
 
 
 
-
-
-const teacherSchema = new mongoose.Schema({
-    full_name: {
-        type: String,
-        required: true,
-    },
-    login: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
-    group_id: {
-        type: mongoose.Schema.Types.ObjectId, // References a group
-        ref: 'Group', // Assuming you have a Group model
-        required: false, // Group is not mandatory initially
-    }
-}, {
-    timestamps: true
-});
-
-
-// Создание модели для учителей
-const Teacher = mongoose.model('Teacher', teacherSchema);
-
 app.get('/teachers', async (req, res) => {
     try {
         const teachers = await Teacher.find().populate('group_id'); // Populate the group info
@@ -412,8 +386,6 @@ app.get('/teachers', async (req, res) => {
         res.status(500).send('Ошибка при получении учителей');
     }
 });
-
-
 
 app.post('/teachers', async (req, res) => {
     const { full_name, login, password, group_id } = req.body;
@@ -434,7 +406,6 @@ app.post('/teachers', async (req, res) => {
         res.status(500).send('Ошибка при добавлении учителя');
     }
 });
-
 
 app.put('/teachers/:id', async (req, res) => {
     const teacherId = req.params.id;
@@ -458,9 +429,6 @@ app.put('/teachers/:id', async (req, res) => {
     }
 });
 
-
-
-
 app.delete('/teachers/:id', async (req, res) => {
     const teacherId = req.params.id;
 
@@ -475,7 +443,6 @@ app.delete('/teachers/:id', async (req, res) => {
         res.status(500).send('Ошибка при удалении учителя');
     }
 });
-
 
 // Определение схемы для публичных активностей
 let publicActivitySchema = new mongoose.Schema({
@@ -568,7 +535,6 @@ app.delete('/publicactivities/:id', async (req, res) => {
     }
 });
 
-
 // Определение схемы для категорий
 let categorySchema = new mongoose.Schema({
     name: {
@@ -648,8 +614,6 @@ app.delete('/categories/:id', async (req, res) => {
         res.status(500).send('Ошибка при удалении категории.');
     }
 });
-
-
 
 // Определение схемы для частей
 const partSchema = new mongoose.Schema({
