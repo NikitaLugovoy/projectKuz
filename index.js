@@ -255,8 +255,6 @@ app.delete('/achievements/:id', async (req, res) => {
     }
 });
 
-
-
 // Схема студента
 let studentSchema = new mongoose.Schema({
     username: String,
@@ -269,10 +267,7 @@ let studentSchema = new mongoose.Schema({
     }
 });
 
-
 let Student = mongoose.model('Student', studentSchema);
-
-
 
 app.get('/students', async (req, res) => {
     try {
@@ -364,7 +359,6 @@ app.put('/students/:id', async (req, res) => {
 // Delete a student by ID
 app.delete('/students/:id', async (req, res) => {
     const studentId = req.params.id;
-    
     try {
         await Student.findByIdAndDelete(studentId);
         res.status(204).send(); // No content, indicates successful deletion
@@ -373,8 +367,6 @@ app.delete('/students/:id', async (req, res) => {
         res.status(500).send(error);
     }
 });
-
-
 
 app.get('/teachers', async (req, res) => {
     try {
@@ -702,3 +694,19 @@ app.delete('/parts/:id', async (req, res) => {
         res.status(500).send('Ошибка при удалении части.');
     }
 });
+
+app.get(`/account`, async (req, res) =>{
+    try {
+        let teacherId = req.query.id;  // Получение ID преподавателя из параметров запроса
+        const teacher = await Teacher.findOne({ _id: teacherId });
+        if (!teacher) {
+            return res.status(404).send('Преподаватель не найден');
+        }
+        // Отправляем данные в шаблон
+        res.render('account', { teacher });
+    } catch (error) {
+        console.error('Ошибка при получении данных преподавателя:', error);
+        res.status(500).send('Ошибка при получении данных преподавателя');
+    }
+})
+

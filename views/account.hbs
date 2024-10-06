@@ -43,19 +43,11 @@
             </div>
             <div class="mb-3">
                 <h5>Логин:</h5>
-                <p>user_login</p>
+                <p>{{teacher.login}}</p>
             </div>
             <div class="mb-3">
-                <h5>Фамилия:</h5>
-                <p>Иванов</p>
-            </div>
-            <div class="mb-3">
-                <h5>Имя:</h5>
-                <p>Иван</p>
-            </div>
-            <div class="mb-3">
-                <h5>Отчество:</h5>
-                <p>Иванович</p>
+                <h5>ФИО:</h5>
+                <p>{{teacher.full_name}}</p>
             </div>
             <div class="mb-3">
                 <h5>Дата рождения:</h5>
@@ -67,7 +59,7 @@
             </div>
             <div class="mb-3">
                 <h5>Группа:</h5>
-                <p>Группа 1</p>
+                <p>{{teacher.group_id}}</p>
             </div>
             <button type="button" class="btn btn-primary w-100">Изменить</button>
         </div>
