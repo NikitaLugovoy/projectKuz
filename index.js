@@ -64,13 +64,12 @@ app.post('/login', async (req, res) => {
     let password = req.body.password;
     try {
         let teacher = await Teacher.findOne({ login: login, password: password });
-        console.log(teacher)
 
         if (!teacher) {
             return res.redirect('/'); // Используем return здесь
         } 
 
-        return res.redirect('/parts'); // Используем return здесь, если нужно
+        return res.redirect(`/parts/${teacher._id}`); // Используем return здесь, если нужно
     } catch (error) {
         console.error('Ошибка при выполнении запроса к базе данных:', error);
         res.status(500).send('Произошла ошибка при выполнении запроса к базе данных');
@@ -111,10 +110,22 @@ const groupSchema = new mongoose.Schema({
 const Group = mongoose.model('Group', groupSchema);
 
 // Get all groups
-app.get('/groups', async (req, res) => {
+app.get('/groups/:teacherId', async (req, res) => {
     try {
+        // Получаем ID преподавателя из параметров URL
+        const teacherId = req.params.teacherId;
+
+        // Проверяем, существует ли преподаватель в базе данных
+        const teacher = await Teacher.findById(teacherId);
+        if (!teacher) {
+            return res.status(404).send('Преподаватель не найден');
+        }
+
+        // Получаем список групп
         const groups = await Group.find();
-        res.render('group', { groups }); // Render the HBS template with groups data
+
+        // Рендерим шаблон с группами и передаем ID преподавателя
+        res.render('group', { groups, teacherId });
     } catch (error) {
         console.error('Ошибка при получении групп:', error);
         res.status(500).send('Ошибка при получении групп');
@@ -186,16 +197,32 @@ let achievementSchema = new mongoose.Schema({
 let Achievement = mongoose.model('Achievement', achievementSchema);
 // Получение всех достижений
 // Получение всех достижений
-app.get('/achievements', async (req, res) => {
+app.get('/achievements/:teacherId', async (req, res) => {
     try {
-        const achievements = await Achievement.find().populate('student_id'); // Популяция студента
-        console.log('Достижения:', achievements);
-        res.render('achievements', { achievements, students: await Student.find() }); // Передаем достижения и студентов в шаблон
+        // Получаем ID преподавателя из параметров URL
+        const teacherId = req.params.teacherId;
+
+        // Проверяем, существует ли преподаватель (опционально)
+        const teacher = await Teacher.findById(teacherId);
+        if (!teacher) {
+            return res.status(404).send('Преподаватель не найден');
+        }
+
+        // Получаем достижения и популяцию студентов
+        const achievements = await Achievement.find().populate('student_id');
+
+        // Передаем достижения, студентов и ID преподавателя в шаблон
+        res.render('achievements', {
+            achievements,
+            students: await Student.find(), // Получаем список студентов
+            teacherId // Передаем ID преподавателя в шаблон
+        });
     } catch (error) {
         console.error('Ошибка при получении достижений:', error);
         res.status(500).send('Ошибка при получении достижений');
     }
 });
+
 
 // Добавление нового достижения с привязкой к студенту
 app.post('/achievements', async (req, res) => {
@@ -269,19 +296,35 @@ let studentSchema = new mongoose.Schema({
 
 let Student = mongoose.model('Student', studentSchema);
 
-app.get('/students', async (req, res) => {
+app.get('/students/:teacherId', async (req, res) => {
     try {
-        const students = await Student.find().populate('group_id'); // Populate group data
-        const groups = await Group.find(); // Fetch all groups
-        console.log(groups);
-        res.render('student', { students, groups, groups2: groups }); // Pass students and groups to the HBS template
+        // Получаем ID преподавателя из параметров URL
+        const teacherId = req.params.teacherId;
 
+        // Проверяем, существует ли преподаватель (опционально)
+        const teacher = await Teacher.findById(teacherId);
+        if (!teacher) {
+            return res.status(404).send('Преподаватель не найден');
+        }
+
+        // Получаем студентов с популяцией данных о группах
+        const students = await Student.find().populate('group_id');
+
+        // Получаем все группы
+        const groups = await Group.find();
+
+        // Передаем студентов, группы и ID преподавателя в шаблон
+        res.render('student', {
+            students,
+            groups,
+            groups2: groups, // Для дополнительной выборки групп, если требуется
+            teacherId // Передаем ID преподавателя
+        });
     } catch (error) {
-        console.error('Error fetching students:', error);
+        console.error('Ошибка при получении студентов:', error);
         res.status(500).send(error);
     }
 });
-
 
 app.post('/students', async (req, res) => {
     try {
@@ -368,8 +411,16 @@ app.delete('/students/:id', async (req, res) => {
     }
 });
 
-app.get('/teachers', async (req, res) => {
+app.get('/teachers/:teacherId', async (req, res) => {
     try {
+        // Получаем ID преподавателя из параметров URL
+        const teacherId = req.params.teacherId;
+
+        // Проверяем, существует ли преподаватель (опционально)
+        const teacher = await Teacher.findById(teacherId);
+        if (!teacher) {
+            return res.status(404).send('Преподаватель не найден');
+        }
         const teachers = await Teacher.find().populate('group_id'); // Populate the group info
         const groups = await Group.find(); // Fetch available groups
         res.render('teacher', { teachers, groups });
@@ -456,10 +507,17 @@ let publicActivitySchema = new mongoose.Schema({
 let PublicActivity = mongoose.model('PublicActivity', publicActivitySchema);
 
 // Получение всех публичных активностей
-app.get('/publicactivities', async (req, res) => {
+app.get('/publicactivities/:teacherId', async (req, res) => {
     try {
+         // Получаем ID преподавателя из параметров URL
+        const teacherId = req.params.teacherId;
+
+         // Проверяем, существует ли преподаватель (опционально)
+        const teacher = await Teacher.findById(teacherId);
+        if (!teacher) {
+            return res.status(404).send('Преподаватель не найден');
+        }
         const publicActivities = await PublicActivity.find().populate('student_id'); // Популяция студента
-        console.log('Публичные активности:', publicActivities);
         res.render('publicactivities', { publicActivities, students: await Student.find() }); // Передаем активности и студентов в шаблон
     } catch (error) {
         console.error('Ошибка при получении публичных активностей:', error);
@@ -539,16 +597,28 @@ let categorySchema = new mongoose.Schema({
 let Category = mongoose.model('Category', categorySchema);
 
 // Получение всех категорий
-app.get('/categories', async (req, res) => {
+app.get('/categories/:teacherId', async (req, res) => {
     try {
-        const categories = await Category.find(); // Получаем все категории
-        console.log('Категории:', categories);
-        res.render('categories', { categories }); // Передаем категории в шаблон
+        // Получаем ID преподавателя из параметров URL
+        const teacherId = req.params.teacherId;
+        // Проверяем, существует ли преподаватель (опционально)
+        const teacher = await Teacher.findById(teacherId);
+        if (!teacher) {
+            return res.status(404).send('Преподаватель не найден');
+        }
+        // Получаем все категории
+        const categories = await Category.find();
+        // Передаем категории и ID преподавателя в шаблон
+        res.render('categories', {
+            categories,
+            teacherId // Передаем ID преподавателя
+        });
     } catch (error) {
         console.error('Ошибка при получении категорий:', error);
         res.status(500).send('Ошибка при получении категорий');
     }
 });
+
 
 // Добавление новой категории
 app.post('/categories', async (req, res) => {
@@ -626,16 +696,29 @@ const partSchema = new mongoose.Schema({
 const Part = mongoose.model('Part', partSchema);
 
 // Получение всех частей
-app.get('/parts', async (req, res) => {
+app.get('/parts/:teacherId', async (req, res) => {
     try {
+        // Получаем ID преподавателя из параметров URL
+        const teacherId = req.params.teacherId;
+
+        // Проверяем, есть ли такой преподаватель в базе данных (опционально)
+        const teacher = await Teacher.findById(teacherId);
+        if (!teacher) {
+            return res.status(404).send('Преподаватель не найден');
+        }
+
+        // Получаем части и категории
         const parts = await Part.find().populate('category_id'); // Заполнение информации о категории
         const categories = await Category.find(); // Получение доступных категорий
-        res.render('parts', { parts, categories }); // Передача частей и категорий в шаблон
+
+        // Передаем части, категории и ID преподавателя в шаблон
+        res.render('parts', { parts, categories, teacherId });
     } catch (error) {
         console.error('Ошибка при получении частей:', error);
         res.status(500).send('Ошибка при получении частей');
     }
 });
+
 
 // Добавление новой части
 app.post('/parts', async (req, res) => {
@@ -695,9 +778,9 @@ app.delete('/parts/:id', async (req, res) => {
     }
 });
 
-app.get(`/account`, async (req, res) =>{
+app.get('/account/:teacherId', async (req, res) => {
     try {
-        let teacherId = req.query.id;  // Получение ID преподавателя из параметров запроса
+        let teacherId = req.params.teacherId;  // Получение ID преподавателя из URL
         const teacher = await Teacher.findOne({ _id: teacherId });
         if (!teacher) {
             return res.status(404).send('Преподаватель не найден');
@@ -708,5 +791,6 @@ app.get(`/account`, async (req, res) =>{
         console.error('Ошибка при получении данных преподавателя:', error);
         res.status(500).send('Ошибка при получении данных преподавателя');
     }
-})
+});
+
 
