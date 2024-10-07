@@ -55,6 +55,15 @@ hbs.registerHelper('eq', function (a, b) {
     return a === b;
 });
 
+// Register custom 'includes' helper
+hbs.registerHelper('includes', function(array, value) {
+    return Array.isArray(array) && array.includes(value);
+});
+
+hbs.registerHelper('formatDate', function(date) {
+    return new Date(date).toLocaleDateString();
+});
+
 app.get('/', async (req,res) => {
     res.render('login');
 })
@@ -794,3 +803,174 @@ app.get('/account/:teacherId', async (req, res) => {
 });
 
 
+// Схема для коллекции reportpartinfo
+const reportPartInfoSchema = new mongoose.Schema({
+    group_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Group', // Ссылка на коллекцию Group
+        required: true // Группа обязательна
+    },
+    student_ids: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Student', // Ссылка на коллекцию Student
+        required: true // Студенты обязательны
+    }],
+    category_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category', // Ссылка на коллекцию Category
+        required: true // Категория обязательна
+    },
+    part_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Part', // Ссылка на коллекцию Part
+        required: true // Часть обязательна
+    },
+    date: {
+        type: Date,
+        required: true // Дата обязательна
+    },
+    photo: {
+        type: String, // Пусть это будет строка для хранения пути к файлу изображения
+        required: false // Фото не обязательно
+    },
+    details: {
+        type: String, // Поле для детальной информации
+        required: false // Информация не обязательна
+    }
+}, {
+    timestamps: true // Поля createdAt и updatedAt
+});
+
+// Создание модели для reportPartInfo
+const ReportPartInfo = mongoose.model('ReportPartInfo', reportPartInfoSchema);
+
+// Route to display report parts page
+app.get('/report-parts', async (req, res) => {
+    try {
+        const reportParts = await ReportPartInfo.find()
+            .populate('group_id')
+            .populate('student_ids')
+            .populate('category_id')
+            .populate('part_id');
+
+        const groups = await Group.find();
+        const categories = await Category.find();
+
+        res.render('report-part-info', { reportParts, groups, categories });
+    } catch (error) {
+        console.error('Error fetching report parts:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+// Route to create a new report part
+app.post('/report-parts', async (req, res) => {
+    const { group_id, student_ids, category_id, part_id, date, photo, details } = req.body;
+
+    console.log('Дата:', date); // Логируем дату
+
+    try {
+        const newReportPart = new ReportPartInfo({
+            group_id,
+            student_ids,
+            category_id,
+            part_id,
+            date,
+            photo,
+            details,
+        });
+        await newReportPart.save();
+        res.redirect('/report-parts');
+    } catch (error) {
+        console.error('Error creating report part:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+
+
+// Route to update a report part
+app.put('/report-parts/:id', async (req, res) => {
+    const { id } = req.params;
+    const { group_id, student_ids, category_id, part_id, date, photo, details } = req.body;
+
+    try {
+        await ReportPartInfo.findByIdAndUpdate(id, {
+            group_id,
+            student_ids,
+            category_id,
+            part_id,
+            date,
+            photo,
+            details,
+        });
+        res.redirect('/report-parts'); // Redirect back to the list
+    } catch (error) {
+        console.error('Error updating report part:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+// Route to delete a report part
+app.delete('/report-parts/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await ReportPartInfo.findByIdAndDelete(id);
+        res.redirect('/report-parts'); // Redirect back to the list
+    } catch (error) {
+        console.error('Error deleting report part:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+// Fetch students by group (for the group select event)
+app.get('/groups/:id/students', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const students = await Student.find({ group_id: id });
+        res.json(students);
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+// Fetch parts by category (for the category select event)
+app.get('/categories/:id/parts', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const parts = await Part.find({ category_id: id });
+        res.json(parts);
+    } catch (error) {
+        console.error('Error fetching parts:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+
+app.get('/groups/:groupId/students', async (req, res) => {
+    try {
+        const groupId = req.params.groupId;
+        const students = await Student.find({ group_id: groupId }); // Или как у вас настроена связь с группами
+        res.json(students);
+        
+        console.log("Students" + students);
+    } catch (error) {
+        res.status(500).json({ message: 'Ошибка при получении студентов' });
+    }
+});
+
+
+app.get('/categories/:categoryId/parts', async (req, res) => {
+    try {
+        const categoryId = req.params.categoryId;
+        const parts = await Part.find({ category_id: categoryId }).populate('category_id', 'name');
+        res.json(parts);
+    } catch (error) {
+        console.error('Ошибка при получении частей:', error);
+        res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
