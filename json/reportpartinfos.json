@@ -1,0 +1,314 @@
+[{
+  "_id": {
+    "$oid": "6703d02f91868a09a9970cbb"
+  },
+  "group_id": {
+    "$oid": "6504d8a7a5b8f9a6b6d4e130"
+  },
+  "student_ids": [
+    {
+      "$oid": "66fd182b9fedcd0ecb0d7d6e"
+    }
+  ],
+  "category_id": {
+    "$oid": "66fe8e9cb0bb8b382214dabc"
+  },
+  "part_id": {
+    "$oid": "6703cc76465abfb2f298c301"
+  },
+  "date": {
+    "$date": "2024-10-10T00:00:00.000Z"
+  },
+  "photo": "чсчс",
+  "details": "счсчс",
+  "createdAt": {
+    "$date": "2024-10-07T12:12:31.961Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-08T15:46:08.474Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6704fdacc3788719cce54d40"
+  },
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "student_ids": [
+    {
+      "$oid": "66fd00bb3be252c13ea21ac5"
+    }
+  ],
+  "category_id": {
+    "$oid": "66fe8e9cb0bb8b382214dabc"
+  },
+  "part_id": {
+    "$oid": "6703cc76465abfb2f298c301"
+  },
+  "date": {
+    "$date": {
+      "$numberLong": "-23892969600000"
+    }
+  },
+  "photo": "s",
+  "details": "s",
+  "createdAt": {
+    "$date": "2024-10-08T09:38:52.546Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-08T15:45:49.533Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6704fdccc3788719cce54d47"
+  },
+  "group_id": {
+    "$oid": "6504d8a7a5b8f9a6b6d4e130"
+  },
+  "student_ids": [
+    {
+      "$oid": "6504b6b565d4f9e6e4e5b0a3"
+    }
+  ],
+  "category_id": {
+    "$oid": "66fe8e9cb0bb8b382214dabc"
+  },
+  "part_id": {
+    "$oid": "6703cc76465abfb2f298c301"
+  },
+  "date": {
+    "$date": {
+      "$numberLong": "-23892969600000"
+    }
+  },
+  "photo": "s,,,",
+  "details": "s",
+  "createdAt": {
+    "$date": "2024-10-08T09:39:24.943Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-08T15:37:28.828Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6704fe69c3788719cce54d57"
+  },
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "student_ids": [
+    {
+      "$oid": "66fd175ca053be86e8286664"
+    },
+    {
+      "$oid": "66fd189e9fedcd0ecb0d7d7b"
+    }
+  ],
+  "category_id": {
+    "$oid": "66fe8e9cb0bb8b382214dabc"
+  },
+  "part_id": {
+    "$oid": "6703cc70465abfb2f298c2f9"
+  },
+  "date": {
+    "$date": {
+      "$numberLong": "-27080352000000"
+    }
+  },
+  "photo": "https://cdn.izap24.ru/images/prodacts/sourse/156782/156782839_opel-astra-4-j-gtc-kreslo-pravaya-perednyaya-voditelya.jpg",
+  "details": "12",
+  "createdAt": {
+    "$date": "2024-10-08T09:42:01.968Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-08T15:41:23.867Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67053a79803a94aacc5d04ee"
+  },
+  "group_id": {
+    "$oid": "6504d8a7a5b8f9a6b6d4e130"
+  },
+  "student_ids": [
+    {
+      "$oid": "6504b6b565d4f9e6e4e5b0a3"
+    },
+    {
+      "$oid": "66fba34d398a1a215e734073"
+    },
+    {
+      "$oid": "66fd1792a053be86e828666c"
+    }
+  ],
+  "category_id": {
+    "$oid": "66fe8e9eb0bb8b382214dabe"
+  },
+  "part_id": {
+    "$oid": "6703cc73465abfb2f298c2fd"
+  },
+  "date": {
+    "$date": {
+      "$numberLong": "-61792934400000"
+    }
+  },
+  "photo": "3",
+  "details": "333",
+  "createdAt": {
+    "$date": "2024-10-08T13:58:17.447Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-08T15:40:46.498Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67053dda803a94aacc5d0561"
+  },
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "student_ids": [
+    {
+      "$oid": "66fd175ca053be86e8286664"
+    },
+    {
+      "$oid": "66fd189e9fedcd0ecb0d7d7b"
+    }
+  ],
+  "category_id": {
+    "$oid": "66fe8e9cb0bb8b382214dabc"
+  },
+  "part_id": {
+    "$oid": "6703cc70465abfb2f298c2f9"
+  },
+  "date": {
+    "$date": {
+      "$numberLong": "-61758633600000"
+    }
+  },
+  "photo": "2",
+  "details": "3333",
+  "createdAt": {
+    "$date": "2024-10-08T14:12:42.205Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-08T15:40:28.418Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67053fc022add00bb199eeba"
+  },
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "student_ids": [
+    {
+      "$oid": "66fd175ca053be86e8286664"
+    },
+    {
+      "$oid": "66fd189e9fedcd0ecb0d7d7b"
+    }
+  ],
+  "category_id": {
+    "$oid": "66fe8e9cb0bb8b382214dabc"
+  },
+  "part_id": {
+    "$oid": "6703cc70465abfb2f298c2f9"
+  },
+  "date": {
+    "$date": {
+      "$numberLong": "-61433683200000"
+    }
+  },
+  "photo": "https://avatars.mds.yandex.net/i?id=a6e6787195b2ccbc33b21cc693c1eb43d4d02870-5451533-images-thumbs&n=13",
+  "details": "ee",
+  "createdAt": {
+    "$date": "2024-10-08T14:20:48.808Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-08T15:34:36.696Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6705432122add00bb199eed9"
+  },
+  "group_id": {
+    "$oid": "66fa95f5b5602aa20e0f3caf"
+  },
+  "student_ids": [
+    {
+      "$oid": "66fd1740a053be86e828665f"
+    },
+    {
+      "$oid": "66fd175ca053be86e8286664"
+    }
+  ],
+  "category_id": {
+    "$oid": "66fe8e9cb0bb8b382214dabc"
+  },
+  "part_id": {
+    "$oid": "6703cc70465abfb2f298c2f9"
+  },
+  "date": {
+    "$date": {
+      "$numberLong": "-51970723200000"
+    }
+  },
+  "photo": "3",
+  "details": "3",
+  "createdAt": {
+    "$date": "2024-10-08T14:35:13.340Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-08T15:34:00.982Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670552c89ee69ca35740fd9a"
+  },
+  "group_id": {
+    "$oid": "6504d8a7a5b8f9a6b6d4e130"
+  },
+  "student_ids": [
+    {
+      "$oid": "6504b6b565d4f9e6e4e5b0a3"
+    },
+    {
+      "$oid": "66fd1792a053be86e828666c"
+    }
+  ],
+  "category_id": {
+    "$oid": "66fe8e9cb0bb8b382214dabc"
+  },
+  "part_id": {
+    "$oid": "6703cc76465abfb2f298c301"
+  },
+  "date": {
+    "$date": "3333-03-13T00:00:00.000Z"
+  },
+  "photo": "https://avatars.mds.yandex.net/get-autoru-vos/2155890/608dbabdbd30c84ddbc4a5d08ff54630/1200x900",
+  "details": "ссс",
+  "createdAt": {
+    "$date": "2024-10-08T15:42:00.950Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-08T15:42:00.950Z"
+  },
+  "__v": 0
+}]

@@ -844,85 +844,6 @@ const reportPartInfoSchema = new mongoose.Schema({
 // Создание модели для reportPartInfo
 const ReportPartInfo = mongoose.model('ReportPartInfo', reportPartInfoSchema);
 
-// Route to display report parts page
-app.get('/report-parts', async (req, res) => {
-    try {
-        const reportParts = await ReportPartInfo.find()
-            .populate('group_id')
-            .populate('student_ids')
-            .populate('category_id')
-            .populate('part_id');
-
-        const groups = await Group.find();
-        const categories = await Category.find();
-
-        res.render('report-part-info', { reportParts, groups, categories });
-    } catch (error) {
-        console.error('Error fetching report parts:', error);
-        res.status(500).send('Server error');
-    }
-});
-
-// Route to create a new report part
-app.post('/report-parts', async (req, res) => {
-    const { group_id, student_ids, category_id, part_id, date, photo, details } = req.body;
-
-    console.log('Дата:', date); // Логируем дату
-
-    try {
-        const newReportPart = new ReportPartInfo({
-            group_id,
-            student_ids,
-            category_id,
-            part_id,
-            date,
-            photo,
-            details,
-        });
-        await newReportPart.save();
-        res.redirect('/report-parts');
-    } catch (error) {
-        console.error('Error creating report part:', error);
-        res.status(500).send('Server error');
-    }
-});
-
-
-
-// Route to update a report part
-app.put('/report-parts/:id', async (req, res) => {
-    const { id } = req.params;
-    const { group_id, student_ids, category_id, part_id, date, photo, details } = req.body;
-
-    try {
-        await ReportPartInfo.findByIdAndUpdate(id, {
-            group_id,
-            student_ids,
-            category_id,
-            part_id,
-            date,
-            photo,
-            details,
-        });
-        res.redirect('/report-parts'); // Redirect back to the list
-    } catch (error) {
-        console.error('Error updating report part:', error);
-        res.status(500).send('Server error');
-    }
-});
-
-// Route to delete a report part
-app.delete('/report-parts/:id', async (req, res) => {
-    const { id } = req.params;
-
-    try {
-        await ReportPartInfo.findByIdAndDelete(id);
-        res.redirect('/report-parts'); // Redirect back to the list
-    } catch (error) {
-        console.error('Error deleting report part:', error);
-        res.status(500).send('Server error');
-    }
-});
 
 // Fetch students by group (for the group select event)
 app.get('/groups/:id/students', async (req, res) => {
@@ -974,3 +895,124 @@ app.get('/categories/:categoryId/parts', async (req, res) => {
         res.status(500).json({ message: 'Ошибка сервера' });
     }
 });
+
+
+
+
+app.get('/report-part-info', async (req, res) => {
+    try {
+        const reports = await ReportPartInfo.find()
+            .populate('group_id')
+            .populate('student_ids')
+            .populate('category_id')
+            .populate('part_id');
+        const groups = await Group.find();
+        const students = await Student.find();
+        const categories = await Category.find();
+        const parts = await Part.find();
+
+        res.render('reportPartInfo', { reports, groups, students, categories, parts });
+    } catch (error) {
+        console.error('Ошибка при получении отчётов:', error);
+        res.status(500).send('Ошибка при получении отчётов');
+    }
+});
+
+
+
+app.post('/report-part-info', async (req, res) => {
+    const { group_id, student_ids, category_id, part_id, date, photo, details } = req.body;
+
+    const newReport = new ReportPartInfo({
+        group_id,
+        student_ids,
+        category_id,
+        part_id,
+        date,
+        photo,
+        details
+    });
+
+    try {
+        const savedReport = await newReport.save();
+        const populatedReport = await ReportPartInfo.findById(savedReport._id)
+            .populate('group_id')
+            .populate('student_ids')
+            .populate('category_id')
+            .populate('part_id');
+
+        res.status(201).json(populatedReport);
+    } catch (error) {
+        console.error('Ошибка при добавлении отчёта:', error);
+        res.status(500).send('Ошибка при добавлении отчёта');
+    }
+});
+
+
+
+app.put('/report-part-info/:id', async (req, res) => {
+    const reportId = req.params.id;
+    const { group_id, student_ids, category_id, part_id, date, photo, details } = req.body;
+
+    try {
+        const updatedReport = await ReportPartInfo.findByIdAndUpdate(
+            reportId,
+            { group_id, student_ids, category_id, part_id, date, photo, details },
+            { new: true }
+        )
+            .populate('group_id')
+            .populate('student_ids')
+            .populate('category_id')
+            .populate('part_id');
+
+        if (!updatedReport) {
+            return res.status(404).send('Отчёт не найден.');
+        }
+
+        res.status(200).json(updatedReport);
+    } catch (error) {
+        console.error('Ошибка при обновлении отчёта:', error);
+        res.status(500).send('Ошибка при обновлении отчёта');
+    }
+});
+
+
+
+app.delete('/report-part-info/:id', async (req, res) => {
+    const reportId = req.params.id;
+
+    try {
+        const deletedReport = await ReportPartInfo.findByIdAndDelete(reportId);
+        if (!deletedReport) {
+            return res.status(404).send('Отчёт не найден.');
+        }
+
+        res.status(200).send('Отчёт успешно удалён.');
+    } catch (error) {
+        console.error('Ошибка при удалении отчёта:', error);
+        res.status(500).send('Ошибка при удалении отчёта.');
+    }
+});
+
+app.get('/report-part-info/:id', async (req, res) => {
+    try {
+        const report = await ReportPartInfo.findById(req.params.id)
+            .populate('group_id')
+            .populate('student_ids')
+            .populate('category_id')
+            .populate('part_id');
+        
+        if (!report) {
+            return res.status(404).send('Отчёт не найден.');
+        }
+
+        res.json(report);
+    } catch (error) {
+        console.error('Ошибка при получении отчёта:', error);
+        res.status(500).send('Ошибка при получении отчёта.');
+    }
+});
+
+
+
+

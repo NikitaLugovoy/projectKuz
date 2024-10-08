@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отчёты по частям</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Форма для добавления нового отчёта -->
+    <div class="container mt-4">
+        <h3>Добавить новый отчёт</h3>
+        <form id="report-form">
+            <div class="mb-3">
+                <label for="group" class="form-label">Группа</label>
+                <select name="group_id" id="group-select" class="form-control" required>
+                    <option value="">Выберите группу</option>
+                    {{#each groups}}
+                    <option value="{{this._id}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <div class="mb-3" id="student-checkboxes" style="display: none;">
+                <label for="students" class="form-label">Студенты</label>
+                <div id="student-list"></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="category" class="form-label">Категория</label>
+                <select name="category_id" id="category-select" class="form-control" required>
+                    <option value="">Выберите категорию</option>
+                    {{#each categories}}
+                    <option value="{{this._id}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="part" class="form-label">Часть</label>
+                <select name="part_id" id="part-select" class="form-control" required>
+                    <option value="">Сначала выберите категорию</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="date" class="form-label">Дата</label>
+                <input type="date" name="date" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="photo" class="form-label">Фото (URL)</label>
+                <input type="text" name="photo" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="details" class="form-label">Детали</label>
+                <textarea name="details" class="form-control"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Добавить отчёт</button>
+        </form>
+    </div>
+
+    <!-- Таблица для отображения отчётов -->
+    <div class="container mt-4">
+        <h3>Список отчётов</h3>
+        <table class="table table-bordered text-center">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Группа</th>
+                    <th scope="col">Студенты</th>
+                    <th scope="col">Категория</th>
+                    <th scope="col">Часть</th>
+                    <th scope="col">Дата</th>
+                    <th scope="col">Фото</th>
+                    <th scope="col">Детали</th>
+                    <th scope="col">Действия</th>
+                </tr>
+            </thead>
+            <tbody id="report-table-body">
+                {{#each reports}}
+                <tr id="report-{{this._id}}">
+                    <td>{{this.group_id.name}}</td>
+                    <td>
+                        {{#each this.student_ids}}
+                        {{this.username}}<br>
+                        {{/each}}
+                    </td>
+                    <td>{{this.category_id.name}}</td>
+                    <td>{{this.part_id.title}}</td>
+                    <td>{{this.date}}</td>
+                    <td><img src="{{this.photo}}" alt="Фото" style="max-width: 100px;"></td>
+                    <td>{{this.details}}</td>
+                    <td>
+                        <button class="btn btn-warning edit-btn" data-id="{{this._id}}">Редактировать</button>
+                        <button class="btn btn-danger delete-btn" data-id="{{this._id}}">Удалить</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal for editing a report -->
+<div class="modal fade" id="editReportModal" tabindex="-1" aria-labelledby="editReportLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editReportLabel">Редактировать отчёт</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-report-form">
+                    <input type="hidden" name="report_id" id="edit-report-id">
+
+                    <div class="mb-3">
+                        <label for="edit-group-select" class="form-label">Группа</label>
+                        <select name="group_id" id="edit-group-select" class="form-control" required>
+                            <option value="">Выберите группу</option>
+                            {{#each groups}}
+                            <option value="{{this._id}}">{{this.name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+
+                    <div class="mb-3" id="edit-student-checkboxes" style="display: none;">
+                        <label for="students" class="form-label">Студенты</label>
+                        <div id="edit-student-list"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit-category-select" class="form-label">Категория</label>
+                        <select name="category_id" id="edit-category-select" class="form-control" required>
+                            <option value="">Выберите категорию</option>
+                            {{#each categories}}
+                            <option value="{{this._id}}">{{this.name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit-part-select" class="form-label">Часть</label>
+                        <select name="part_id" id="edit-part-select" class="form-control" required>
+                            <option value="">Сначала выберите категорию</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit-date" class="form-label">Дата</label>
+                        <input type="date" name="date" id="edit-date" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit-photo" class="form-label">Фото (URL)</label>
+                        <input type="text" name="photo" id="edit-photo" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit-details" class="form-label">Детали</label>
+                        <textarea name="details" id="edit-details" class="form-control"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Обработчик выбора группы
+        document.getElementById('group-select').addEventListener('change', function() {
+            const groupId = this.value;
+            const studentList = document.getElementById('student-list');
+            const studentCheckboxesContainer = document.getElementById('student-checkboxes');
+
+            // Сбрасываем предыдущий список студентов
+            studentList.innerHTML = '';
+
+            // Если группа выбрана, получаем студентов этой группы
+            if (groupId) {
+                fetch(`/groups/${groupId}/students`)
+                .then(response => response.json())
+                .then(students => {
+                    // Создаем чекбоксы для студентов
+                    students.forEach(student => {
+                        const checkbox = document.createElement('div');
+                        checkbox.classList.add('form-check');
+                        checkbox.innerHTML = `
+                            <input class="form-check-input" type="checkbox" name="student_ids" value="${student._id}" id="student-${student._id}">
+                            <label class="form-check-label" for="student-${student._id}">${student.username}</label>
+                        `;
+                        studentList.appendChild(checkbox);
+                    });
+
+                    // Показываем контейнер со студентами
+                    studentCheckboxesContainer.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Ошибка при получении студентов:', error);
+                });
+            } else {
+                // Если группа не выбрана, скрываем контейнер со студентами
+                studentCheckboxesContainer.style.display = 'none';
+            }
+        });
+
+        // Обработчик выбора категории
+        document.getElementById('category-select').addEventListener('change', function() {
+            const categoryId = this.value;
+            const partSelect = document.getElementById('part-select');
+
+            // Сбрасываем предыдущий список частей
+            partSelect.innerHTML = '<option value="">Сначала выберите категорию</option>';
+
+            // Если категория выбрана, получаем части этой категории
+            if (categoryId) {
+                fetch(`/categories/${categoryId}/parts`)
+                    .then(response => response.json())
+                    .then(parts => {
+                        // Создаем опции для частей
+                        parts.forEach(part => {
+                            const option = document.createElement('option');
+                            option.value = part._id;
+                            option.textContent = part.title;
+                            partSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Ошибка при получении частей:', error);
+                    });
+            }
+        });
+
+        // Логика для отправки формы
+        // Логика для отправки формы
+const reportForm = document.getElementById('report-form');
+reportForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Измененный код для сбора данных
+    const formData = new FormData(reportForm);
+    const data = {};
+
+    // Обработка данных формы
+    for (const [key, value] of formData.entries()) {
+        if (Array.isArray(data[key])) {
+            data[key].push(value); // Добавляем в массив, если ключ уже существует
+        } else if (data[key]) {
+            data[key] = [data[key], value]; // Преобразуем в массив, если есть одно значение
+        } else {
+            data[key] = value; // Иначе просто присваиваем значение
+        }
+    }
+
+    // Преобразование массивов в строки, если это необходимо
+    if (Array.isArray(data.photo)) {
+        data.photo = data.photo.join(', '); // Преобразуем массив в строку
+    }
+
+    if (Array.isArray(data.details)) {
+        data.details = data.details.join(', '); // Преобразуем массив в строку
+    }
+
+    const response = await fetch('/report-part-info', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+        const newReport = await response.json();
+        console.log('Добавленный отчёт:', newReport);
+
+        // Добавление новой строки в таблицу отчётов
+        const reportTableBody = document.getElementById('report-table-body');
+        const newRow = document.createElement('tr');
+        newRow.id = `report-${newReport._id}`;
+
+        newRow.innerHTML = `
+            <td>${newReport.group_id.name}</td>
+            <td>
+                ${newReport.student_ids.map(student => `${student.username}<br>`).join('')}
+            </td>
+            <td>${newReport.category_id.name}</td>
+            <td>${newReport.part_id.title}</td>
+            <td>${newReport.date}</td>
+            <td><img src="${newReport.photo}" alt="Фото" style="max-width: 100px;"></td>
+            <td>${newReport.details}</td>
+            <td>
+                <button class="btn btn-warning edit-btn" data-id="${newReport._id}">Редактировать</button>
+                <button class="btn btn-danger delete-btn" data-id="${newReport._id}">Удалить</button>
+            </td>
+        `;
+
+        reportTableBody.appendChild(newRow);
+
+        // Сбрасываем форму после успешного добавления
+        reportForm.reset();
+    } else {
+        console.error('Ошибка при добавлении отчёта:', response.statusText);
+    }
+});
+
+
+
+// Функция для удаления отчёта
+async function handleDelete(e) {
+    const reportId = e.target.getAttribute('data-id');
+
+    const response = await fetch(`/report-part-info/${reportId}`, {
+        method: 'DELETE',
+    });
+
+    if (response.ok) {
+        // Удаляем строку из таблицы
+        const reportRow = document.getElementById(`report-${reportId}`);
+        reportRow.remove();
+    } else {
+        console.error('Ошибка при удалении отчёта:', response.statusText);
+    }
+}
+
+// Добавляем обработчики для существующих кнопок удаления при загрузке страницы
+document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', handleDelete);
+});
+// Обработчик для кнопки редактирования
+document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', async (e) => {
+        const reportId = e.target.getAttribute('data-id');
+        
+        // Получаем данные отчёта с сервера
+        const response = await fetch(`/report-part-info/${reportId}`);
+        const report = await response.json();
+
+        // Заполняем форму редактирования текущими данными отчёта
+        document.getElementById('edit-report-id').value = report._id;
+        document.getElementById('edit-group-select').value = report.group_id._id;
+        document.getElementById('edit-category-select').value = report.category_id._id;
+        document.getElementById('edit-date').value = report.date.split('T')[0];
+        document.getElementById('edit-photo').value = report.photo;
+        document.getElementById('edit-details').value = report.details;
+
+        // Очищаем списки студентов и частей перед добавлением новых
+        document.getElementById('edit-student-list').innerHTML = '';
+        document.getElementById('edit-part-select').innerHTML = '<option value="">Сначала выберите категорию</option>';
+
+        // Показать студентов группы
+        const studentCheckboxesContainer = document.getElementById('edit-student-checkboxes');
+        studentCheckboxesContainer.style.display = 'none'; // Скрыть сначала
+
+        // Получаем студентов текущей группы и отмечаем выбранных
+        await updateStudentList(report.group_id._id, report.student_ids);
+        studentCheckboxesContainer.style.display = 'block'; // Показать после загрузки студентов
+
+        // Загрузка списка частей для выбранной категории
+        const partResponse = await fetch(`/categories/${report.category_id._id}/parts`);
+        const parts = await partResponse.json();
+        parts.forEach(part => {
+            const selected = part._id === report.part_id._id ? 'selected' : '';
+            const option = document.createElement('option');
+            option.value = part._id;
+            option.textContent = part.title;
+            option.selected = selected;
+            document.getElementById('edit-part-select').appendChild(option);
+        });
+
+        // Показать модальное окно
+        new bootstrap.Modal(document.getElementById('editReportModal')).show();
+    });
+});
+
+// Функция для обновления списка студентов на основе выбранной группы
+async function updateStudentList(groupId, selectedStudents = []) {
+    const studentList = document.getElementById('edit-student-list');
+    const studentCheckboxesContainer = document.getElementById('edit-student-checkboxes');
+
+    // Сбрасываем предыдущий список студентов
+    studentList.innerHTML = '';
+
+    // Если группа выбрана, получаем студентов этой группы
+    if (groupId) {
+        try {
+            const groupResponse = await fetch(`/groups/${groupId}/students`);
+            const students = await groupResponse.json();
+            // Создаем чекбоксы для студентов
+            students.forEach(student => {
+                const isChecked = selectedStudents.some(s => s._id === student._id) ? 'checked' : '';
+                const checkbox = document.createElement('div');
+                checkbox.classList.add('form-check');
+                checkbox.innerHTML = `
+                    <input class="form-check-input" type="checkbox" name="student_ids" value="${student._id}" id="student-edit-${student._id}" ${isChecked}>
+                    <label class="form-check-label" for="student-edit-${student._id}">${student.username}</label>
+                `;
+                studentList.appendChild(checkbox);
+            });
+
+            // Показываем контейнер со студентами
+            studentCheckboxesContainer.style.display = 'block';
+        } catch (error) {
+            console.error('Ошибка при получении студентов:', error);
+        }
+    } else {
+        // Если группа не выбрана, скрываем контейнер со студентами
+        studentCheckboxesContainer.style.display = 'none';
+    }
+}
+
+// Обработчик для смены группы в модальном окне
+document.getElementById('edit-group-select').addEventListener('change', function() {
+    const groupId = this.value;
+    updateStudentList(groupId);
+});
+
+// Обработчик для смены категории в модальном окне
+document.getElementById('edit-category-select').addEventListener('change', async function() {
+    const categoryId = this.value;
+    const partSelect = document.getElementById('edit-part-select');
+    partSelect.innerHTML = '<option value="">Сначала выберите категорию</option>'; // Reset parts
+
+    if (categoryId) {
+        const partResponse = await fetch(`/categories/${categoryId}/parts`);
+        const parts = await partResponse.json();
+        parts.forEach(part => {
+            const option = document.createElement('option');
+            option.value = part._id;
+            option.textContent = part.title;
+            partSelect.appendChild(option);
+        });
+    }
+});
+
+// Функция для обновления списка студентов на основе выбранной группы
+async function updateStudentList(groupId, selectedStudents = []) {
+    const studentList = document.getElementById('edit-student-list');
+    const studentCheckboxesContainer = document.getElementById('edit-student-checkboxes');
+
+    // Сбрасываем предыдущий список студентов
+    studentList.innerHTML = '';
+
+    // Если группа выбрана, получаем студентов этой группы
+    if (groupId) {
+        try {
+            const groupResponse = await fetch(`/groups/${groupId}/students`);
+            const students = await groupResponse.json();
+            // Создаем чекбоксы для студентов
+            students.forEach(student => {
+                const isChecked = selectedStudents.some(s => s._id === student._id) ? 'checked' : '';
+                const checkbox = document.createElement('div');
+                checkbox.classList.add('form-check');
+                checkbox.innerHTML = `
+                    <input class="form-check-input" type="checkbox" name="student_ids" value="${student._id}" id="student-edit-${student._id}" ${isChecked}>
+                    <label class="form-check-label" for="student-edit-${student._id}">${student.username}</label>
+                `;
+                studentList.appendChild(checkbox);
+            });
+
+            // Показываем контейнер со студентами
+            studentCheckboxesContainer.style.display = 'block';
+        } catch (error) {
+            console.error('Ошибка при получении студентов:', error);
+        }
+    } else {
+        // Если группа не выбрана, скрываем контейнер со студентами
+        studentCheckboxesContainer.style.display = 'none';
+    }
+}
+
+// Обработчик отправки формы редактирования
+document.getElementById('edit-report-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const reportId = formData.get('report_id');
+    formData.delete('report_id');  // Убираем ID, чтобы не отправлять его в теле запроса
+
+    const data = Object.fromEntries(formData);
+
+    // Получаем все выбранные студенты
+    const selectedStudents = [];
+    const studentCheckboxes = document.querySelectorAll('#edit-student-list input[type="checkbox"]:checked');
+    studentCheckboxes.forEach(checkbox => {
+        selectedStudents.push(checkbox.value);
+    });
+    
+    data.student_ids = selectedStudents; // Добавляем массив выбранных студентов
+
+    // Отправляем данные на сервер для обновления
+    const response = await fetch(`/report-part-info/${reportId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+        const updatedReport = await response.json();
+
+        // Обновляем строку отчёта в таблице
+        const reportRow = document.getElementById(`report-${updatedReport._id}`);
+        reportRow.innerHTML = `
+            <td>${updatedReport.group_id.name}</td>
+            <td>${updatedReport.student_ids.map(student => `${student.username}<br>`).join('')}</td>
+            <td>${updatedReport.category_id.name}</td>
+            <td>${updatedReport.part_id.title}</td>
+            <td>${updatedReport.date}</td>
+            <td><img src="${updatedReport.photo}" alt="Фото" style="max-width: 100px;"></td>
+            <td>${updatedReport.details}</td>
+            <td>
+                <button class="btn btn-warning edit-btn" data-id="${updatedReport._id}">Редактировать</button>
+                <button class="btn btn-danger delete-btn" data-id="${updatedReport._id}">Удалить</button>
+            </td>
+        `;
+
+        // Закрыть модальное окно
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editReportModal'));
+        modal.hide();
+    } else {
+        console.error('Ошибка при редактировании отчёта:', response.statusText);
+    }
+});
+
+    </script>
+
+</body>
+</html>
