@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Электронный дневник - Учителя</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Таблица учителей -->
+    <div class="container">
+        <table id="teacher-table" class="table table-bordered text-center">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Полное имя</th>
+                    <th scope="col">Логин</th>
+                    <th scope="col">Пароль</th>
+                    <th scope="col">Группа</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Иван Иванов</td>
+                    <td>ivanov</td>
+                    <td>password123</td>
+                    <td>Математика</td>
+                </tr>
+                <tr>
+                    <td>Мария Петрова</td>
+                    <td>petrova</td>
+                    <td>securepass</td>
+                    <td>Физика</td>
+                </tr>
+            </tbody>
+        </table>
+        <button id="generate-pdf" class="btn btn-primary">Сгенерировать PDF</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+        
+        document.getElementById('generate-pdf').addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.text('Отчет по учителям', 20, 10);
+
+            // Получаем данные из таблицы
+            const table = document.getElementById('teacher-table');
+            const rows = [];
+            table.querySelectorAll('tbody tr').forEach(row => {
+                const rowData = [];
+                row.querySelectorAll('td').forEach(cell => {
+                    rowData.push(cell.textContent);
+                });
+                rows.push(rowData);
+            });
+
+            // Настройки autoTable
+            doc.autoTable({
+                head: [['Полное имя', 'Логин', 'Пароль', 'Группа']],
+                body: rows,
+                startY: 20
+            });
+
+            // Скачивание PDF
+            doc.save('teachers_report.pdf');
+        });
+    </script>
+</body>
+</html>

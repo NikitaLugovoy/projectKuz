@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Отчёты по частям</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -101,6 +104,7 @@
                 {{/each}}
             </tbody>
         </table>
+        <button id="download-pdf">Скачать PDF</button>
     </div>
 
     <!-- Modal for editing a report -->
@@ -170,8 +174,53 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
+        
+
+        const dejaVuSansFont = `data:font/ttf;base64,QGZvbnQtZmFjZSB7DQogZm9udC1mYW1pbHk6IHRlc3QtZm9udDsNCiAgc3JjOiB1cmwoJ2RhdGE6Zm9udC90dGY7Y2hhcnNldD11dGYtODtiYXNlNjQsJykgZm9ybWF0KCd0cnVldHlwZScpOw0KZm9udC13ZWlnaHQ6IG5vcm1hbDsNCmZvbnQtc3R5bGU6IG5vcm1hbDsNCmZvbnQtZGlzcGxheTogYmxvY2s7DQp9`; // Полный код здесь
+
+    window.jsPDF = window.jspdf.jsPDF;
+
+    // Создаем PDF-документ и добавляем шрифт
+    const doc = new jsPDF();
+    doc.addFileToVFS('DejaVuSans.ttf', dejaVuSansFont);
+    doc.addFont('DejaVuSans.ttf', 'DejaVuSans', 'normal');
+    doc.setFont('DejaVuSans'); // Устанавливаем шрифт
+
+    // Генерация PDF с русскими символами
+    document.getElementById("download-pdf").addEventListener("click", () => {
+        const tableBody = document.getElementById('report-table-body');
+        let rows = tableBody.getElementsByTagName('tr');
+        
+        doc.setFontSize(12);
+        doc.text('Список отчётов', 10, 10);
+        
+        let yPosition = 20;
+        for (let i = 0; i < rows.length; i++) {
+            let groupName = rows[i].cells[0].innerText;
+            let students = rows[i].cells[1].innerText;
+            let category = rows[i].cells[2].innerText;
+            let part = rows[i].cells[3].innerText;
+            let date = rows[i].cells[4].innerText;
+            let photo = rows[i].cells[5].innerText;
+            let details = rows[i].cells[6].innerText;
+
+            doc.text(`Группа: ${groupName}`, 10, yPosition);
+            doc.text(`Студенты: ${students}`, 10, yPosition + 10);
+            doc.text(`Категория: ${category}`, 10, yPosition + 20);
+            doc.text(`Часть: ${part}`, 10, yPosition + 30);
+            doc.text(`Дата: ${date}`, 10, yPosition + 40);
+            doc.text(`Фото: ${photo}`, 10, yPosition + 50);
+            doc.text(`Детали: ${details}`, 10, yPosition + 60);
+
+            yPosition += 70; // Сдвигаем позицию для следующего отчета
+        }
+
+        doc.save('reports.pdf');
+    });
+
+        
         // Обработчик выбора группы
         document.getElementById('group-select').addEventListener('change', function() {
             const groupId = this.value;

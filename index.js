@@ -1016,3 +1016,11 @@ app.get('/report-part-info/:id', async (req, res) => {
 
 
 
+
+app.get('/prob', async (req, res) => {
+        // Рендеринг страницы с учителями
+        res.render('probnic');
+    
+});
+
+
