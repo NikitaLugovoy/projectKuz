@@ -76,15 +76,20 @@ app.post('/login', async (req, res) => {
 
         if (!teacher) {
             return res.redirect('/'); // Используем return здесь
-        } 
-
-        return res.redirect(`/parts/${teacher._id}`); // Используем return здесь, если нужно
+        } else if (teacher._id.toString() === "670a3e24d22ff84496a6001b") {
+            res.redirect(`/menu/${teacher._id}`)
+        } else {
+            return res.redirect(`/parts/${teacher._id}`); // Используем return здесь, если нужно
+        }
     } catch (error) {
         console.error('Ошибка при выполнении запроса к базе данных:', error);
         res.status(500).send('Произошла ошибка при выполнении запроса к базе данных');
     }
 });
 
+app.get(`/menu/:teacherId`, async (req, res) =>{
+    res.render(`menu`)
+})
 
 app.get('/register', async (req, res) => {
     res.render('registr');
