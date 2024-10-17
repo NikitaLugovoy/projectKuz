@@ -173,52 +173,54 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/pdfmake@0.1.70/build/pdfmake.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfmake@0.1.70/build/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script>
+    // Генерация Excel-файла с русскими символами
+    document.getElementById("download-pdf").addEventListener("click", () => {
+        const tableBody = document.getElementById('report-table-body');
+        let rows = tableBody.getElementsByTagName('tr');
+
+        // Создание массива данных для Excel
+        let data = [['Группа', 'Студенты', 'Категория', 'Часть', 'Дата', 'Детали']];
+
+        for (let i = 0; i < rows.length; i++) {
+            let groupName = rows[i].cells[0].innerText;
+
+            // Получаем строку со студентами и удаляем лишние пробелы
+            let studentsCell = rows[i].cells[1].innerText;
+
+            // Проверка на наличие студентов
+            let students = studentsCell.length > 0 ? studentsCell.split(',').map(student => student).join(', ') : ''; // Объединяем студентов через запятую
+
+            let category = rows[i].cells[2].innerText.trim();
+            let part = rows[i].cells[3].innerText.trim();
+            let date = rows[i].cells[4].innerText.trim();
+            let details = rows[i].cells[6].innerText.trim();
+
+            // Добавляем данные строки в массив
+            data.push([groupName, students, category, part, date, details]);
+        }
+
+        // Создание рабочей книги Excel
+        let wb = XLSX.utils.book_new(); // Создаем новую книгу
+        let ws = XLSX.utils.aoa_to_sheet(data); // Преобразуем массив данных в лист
+
+        XLSX.utils.book_append_sheet(wb, ws, 'Отчёты'); // Добавляем лист в книгу
+
+        // Генерация и скачивание Excel-файла
+        XLSX.writeFile(wb, 'reports.xlsx');
+    });
+</script>
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         
-
-        const dejaVuSansFont = `data:font/ttf;base64,QGZvbnQtZmFjZSB7DQogZm9udC1mYW1pbHk6IHRlc3QtZm9udDsNCiAgc3JjOiB1cmwoJ2RhdGE6Zm9udC90dGY7Y2hhcnNldD11dGYtODtiYXNlNjQsJykgZm9ybWF0KCd0cnVldHlwZScpOw0KZm9udC13ZWlnaHQ6IG5vcm1hbDsNCmZvbnQtc3R5bGU6IG5vcm1hbDsNCmZvbnQtZGlzcGxheTogYmxvY2s7DQp9`; // Полный код здесь
-
-    window.jsPDF = window.jspdf.jsPDF;
-
-    // Создаем PDF-документ и добавляем шрифт
-    const doc = new jsPDF();
-    doc.addFileToVFS('DejaVuSans.ttf', dejaVuSansFont);
-    doc.addFont('DejaVuSans.ttf', 'DejaVuSans', 'normal');
-    doc.setFont('DejaVuSans'); // Устанавливаем шрифт
-
-    // Генерация PDF с русскими символами
-    document.getElementById("download-pdf").addEventListener("click", () => {
-        const tableBody = document.getElementById('report-table-body');
-        let rows = tableBody.getElementsByTagName('tr');
-        
-        doc.setFontSize(12);
-        doc.text('Список отчётов', 10, 10);
-        
-        let yPosition = 20;
-        for (let i = 0; i < rows.length; i++) {
-            let groupName = rows[i].cells[0].innerText;
-            let students = rows[i].cells[1].innerText;
-            let category = rows[i].cells[2].innerText;
-            let part = rows[i].cells[3].innerText;
-            let date = rows[i].cells[4].innerText;
-            let photo = rows[i].cells[5].innerText;
-            let details = rows[i].cells[6].innerText;
-
-            doc.text(`Группа: ${groupName}`, 10, yPosition);
-            doc.text(`Студенты: ${students}`, 10, yPosition + 10);
-            doc.text(`Категория: ${category}`, 10, yPosition + 20);
-            doc.text(`Часть: ${part}`, 10, yPosition + 30);
-            doc.text(`Дата: ${date}`, 10, yPosition + 40);
-            doc.text(`Фото: ${photo}`, 10, yPosition + 50);
-            doc.text(`Детали: ${details}`, 10, yPosition + 60);
-
-            yPosition += 70; // Сдвигаем позицию для следующего отчета
-        }
-
-        doc.save('reports.pdf');
-    });
 
         
         // Обработчик выбора группы
@@ -578,5 +580,6 @@ document.getElementById('edit-report-form').addEventListener('submit', async (e)
 });
 
     </script>
+
 </body>
 </html>
