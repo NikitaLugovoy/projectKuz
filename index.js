@@ -901,10 +901,7 @@ app.get('/categories/:categoryId/parts', async (req, res) => {
     }
 });
 
-
-
-
-app.get('/report-part-info', async (req, res) => {
+app.get('/report-part-info/:teacherId', async (req, res) => {
     try {
         const reports = await ReportPartInfo.find()
             .populate('group_id')
