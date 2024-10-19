@@ -88,12 +88,14 @@ app.post('/login', async (req, res) => {
 });
 
 app.get(`/menu/:teacherId`, async (req, res) =>{
-    res.render(`menu`)
+    let teacherId = req.params.teacherId;
+    res.render(`menu`, { teacherId })
 })
 
-app.get(`/menuTeach/:teacherId`, async (req, res) =>{
-    res.render(`menuTeach`)
-})
+app.get('/menuTeach/:teacherId', async (req, res) => {
+    let teacherId = req.params.teacherId;
+    res.render('menuTeach', { teacherId });  
+});
 
 app.get('/register', async (req, res) => {
     res.render('registr');
