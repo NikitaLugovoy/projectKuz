@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Личный кабинет</title>
-    <!-- Подключение Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Подключение кастомного CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -37,35 +35,84 @@
     <!-- Контент личного кабинета -->
     <div class="container d-flex flex-column justify-content-center align-items-center vh-100">
         <div class="card p-4" style="width: 100%; max-width: 600px;">
-            <div class="text-center mb-4">
-                <!-- Загрузить фото пользователя -->
-                <img src="https://via.placeholder.com/150" alt="Фото пользователя" class="rounded-circle" style="width: 150px; height: 150px;">
+            <!-- Отображение профиля -->
+            <div id="profile-view">
+                <div class="text-center mb-4">
+                    <img src="https://via.placeholder.com/150" alt="Фото пользователя" class="rounded-circle" style="width: 150px; height: 150px;">
+                </div>
+                <div class="mb-3">
+                    <h5>Логин:</h5>
+                    <p>{{teacher.login}}</p>
+                </div>
+                <div class="mb-3">
+                    <h5>ФИО:</h5>
+                    <p>{{teacher.full_name}}</p>
+                </div>
+                <div class="mb-3">
+                    <h5>Дата рождения:</h5>
+                    <p>01.01.1990</p>
+                </div>
+                <div class="mb-3">
+                    <h5>Гражданство:</h5>
+                    <p>Россия</p>
+                </div>
+                <div class="mb-3">
+                    <h5>Группа:</h5>
+                    <p>{{teacher.group_id.name}}</p>
+                </div>
+                <button type="button" class="btn btn-primary w-100" id="edit-button">Изменить</button>
             </div>
-            <div class="mb-3">
-                <h5>Логин:</h5>
-                <p>{{teacher.login}}</p>
-            </div>
-            <div class="mb-3">
-                <h5>ФИО:</h5>
-                <p>{{teacher.full_name}}</p>
-            </div>
-            <div class="mb-3">
-                <h5>Дата рождения:</h5>
-                <p>01.01.1990</p>
-            </div>
-            <div class="mb-3">
-                <h5>Гражданство:</h5>
-                <p>Россия</p>
-            </div>
-            <div class="mb-3">
-                <h5>Группа:</h5>
-                <p>{{teacher.group_id}}</p>
-            </div>
-            <button type="button" class="btn btn-primary w-100">Изменить</button>
+
+            <!-- Форма редактирования -->
+            <!-- Форма редактирования -->
+<div id="edit-form" style="display: none;">
+    <form action="/editTeacher/{{teacher._id}}" method="POST" id="edit-teacher-form">
+        <div class="mb-3">
+            <label for="full_name" class="form-label">ФИО</label>
+            <input type="text" class="form-control" id="full_name" name="full_name" value="{{teacher.full_name}}" required>
+        </div>
+        <div class="mb-3">
+            <label for="login" class="form-label">Логин</label>
+            <input type="text" class="form-control" id="login" name="login" value="{{teacher.login}}" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Пароль</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Изменить пароль (если нужно)">
+        </div>
+        <div class="mb-3">
+    <label for="group_id" class="form-label">Группа</label>
+    <select class="form-control" name="group_id" id="group_id" required>
+        {{#each groups}}
+            <option value="{{this._id}}" {{#if (eq this._id ../teacher.group_id._id)}}selected{{/if}}>{{this.name}}</option>
+        {{/each}}
+    </select>
+</div>
+
+        <button type="submit" class="btn btn-success w-100">Сохранить</button>
+        <button type="button" class="btn btn-secondary w-100 mt-2" id="cancel-button">Отмена</button>
+    </form>
+</div>
+
         </div>
     </div>
 
-    <!-- Подключение Bootstrap JS -->
+    <script>
+        const editButton = document.getElementById('edit-button');
+        const editForm = document.getElementById('edit-form');
+        const profileView = document.getElementById('profile-view');
+        const cancelButton = document.getElementById('cancel-button');
+
+        editButton.addEventListener('click', function() {
+            profileView.style.display = 'none';
+            editForm.style.display = 'block';
+        });
+
+        cancelButton.addEventListener('click', function() {
+            profileView.style.display = 'block';
+            editForm.style.display = 'none';
+        });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

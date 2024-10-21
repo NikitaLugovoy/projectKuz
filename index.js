@@ -507,6 +507,31 @@ app.delete('/teachers/:id', async (req, res) => {
     }
 });
 
+// Отображение страницы профиля учителя
+app.get('/teachers/:teacherId/account', async (req, res) => {
+    try {
+        const teacherId = req.params.teacherId;
+
+        // Получаем учителя с информацией о группе
+        const teacher = await Teacher.findById(teacherId).populate('group_id');
+        if (!teacher) {
+            return res.status(404).send('Учитель не найден.');
+        }
+
+        // Получаем все доступные группы для выбора
+        const groups = await Group.find();
+
+        // Рендерим страницу с данными учителя и списком групп
+        res.render('account', { teacher, groups });
+    } catch (error) {
+        console.error('Ошибка при получении данных учителя:', error);
+        res.status(500).send('Ошибка при загрузке страницы профиля.');
+    }
+});
+
+
+
+
 // Определение схемы для публичных активностей
 let publicActivitySchema = new mongoose.Schema({
     participation_details: {
@@ -798,20 +823,6 @@ app.delete('/parts/:id', async (req, res) => {
     }
 });
 
-app.get('/account/:teacherId', async (req, res) => {
-    try {
-        let teacherId = req.params.teacherId;  // Получение ID преподавателя из URL
-        const teacher = await Teacher.findOne({ _id: teacherId });
-        if (!teacher) {
-            return res.status(404).send('Преподаватель не найден');
-        }
-        // Отправляем данные в шаблон
-        res.render('account', { teacher });
-    } catch (error) {
-        console.error('Ошибка при получении данных преподавателя:', error);
-        res.status(500).send('Ошибка при получении данных преподавателя');
-    }
-});
 
 
 // Схема для коллекции reportpartinfo
@@ -1031,4 +1042,119 @@ app.get('/prob', async (req, res) => {
     
 });
 
+
+app.get('/account/:teacherId', async (req, res) => {
+    try {
+        const teacherId = req.params.teacherId;
+
+        // Получаем учителя с информацией о группе
+        const teacher = await Teacher.findById(teacherId).populate('group_id');
+        if (!teacher) {
+            return res.status(404).send('Преподаватель не найден');
+        }
+
+        // Получаем все доступные группы для отображения
+        const groups = await Group.find();
+
+        // Отправляем данные учителя и групп в шаблон
+        res.render('account', { teacher, groups });
+    } catch (error) {
+        console.error('Ошибка при получении данных преподавателя:', error);
+        res.status(500).send('Ошибка при получении данных преподавателя');
+    }
+});
+
+
+
+// Обновление данных учителя
+app.put('/editTeacher/:id', async (req, res) => {
+    const teacherId = req.params.id;
+    const { full_name, login, password, group_id } = req.body;
+
+    try {
+        const updateData = {
+            full_name,
+            login,
+            group_id,
+        };
+
+        // Если пароль был указан, обновляем его
+        if (password) {
+            updateData.password = password; // Обязательно примените хэширование пароля
+        }
+
+        const updatedTeacher = await Teacher.findByIdAndUpdate(
+            teacherId,
+            updateData,
+            { new: true, runValidators: true } // Возвращаем обновленное значение и включаем валидацию
+        ).populate('group_id'); // Популяция группы
+
+        if (!updatedTeacher) {
+            return res.status(404).send('Преподаватель не найден.');
+        }
+
+        // Перенаправляем на страницу профиля с обновленными данными
+        res.redirect(`/teachers/${updatedTeacher._id}/account`);
+    } catch (error) {
+        console.error('Ошибка при обновлении данных учителя:', error);
+        res.status(500).send('Ошибка при обновлении данных учителя');
+    }
+});
+
+
+// Отображение страницы редактирования учителя
+app.get('/editTeacher/:teacherId', async (req, res) => {
+    try {
+        const teacherId = req.params.teacherId;
+
+        // Получаем учителя с информацией о группе
+        const teacher = await Teacher.findById(teacherId).populate('group_id');
+        if (!teacher) {
+            return res.status(404).send('Учитель не найден.');
+        }
+
+        // Получаем все доступные группы для выбора
+        const groups = await Group.find();
+
+        // Рендерим страницу редактирования с данными учителя и списком групп
+        res.render('edit-teacher', { teacher, groups });
+    } catch (error) {
+        console.error('Ошибка при получении данных учителя для редактирования:', error);
+        res.status(500).send('Ошибка при загрузке страницы редактирования.');
+    }
+});
+
+app.post('/editTeacher/:id', async (req, res) => {
+    const teacherId = req.params.id;
+    const { full_name, login, password, group_id } = req.body;
+
+    try {
+        const updateData = {
+            full_name,
+            login,
+            group_id,
+        };
+
+        // Если пароль был указан, обновляем его
+        if (password) {
+            updateData.password = password; // Не забудьте применить хэширование пароля
+        }
+
+        const updatedTeacher = await Teacher.findByIdAndUpdate(
+            teacherId,
+            updateData,
+            { new: true, runValidators: true } // Возвращаем обновленное значение и включаем валидацию
+        ).populate('group_id'); // Популяция группы
+
+        if (!updatedTeacher) {
+            return res.status(404).send('Преподаватель не найден.');
+        }
+
+        // Перенаправляем на страницу профиля с обновленными данными
+        res.redirect(`/account/${updatedTeacher._id}`);
+    } catch (error) {
+        console.error('Ошибка при обновлении данных учителя:', error);
+        res.status(500).send('Ошибка при обновлении данных учителя');
+    }
+});
 
