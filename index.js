@@ -76,7 +76,7 @@ app.post('/login', async (req, res) => {
 
         if (!teacher) {
             return res.redirect('/'); // Используем return здесь
-        } else if (teacher._id.toString() === "670a3e24d22ff84496a6001b") {
+        } else if (teacher._id.toString() === "670f9154f104962ab0ef8c07") {
             res.redirect(`/menu/${teacher._id}`)
         } else {
             return res.redirect(`/parts/${teacher._id}`); // Используем return здесь, если нужно
