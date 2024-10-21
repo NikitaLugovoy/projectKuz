@@ -79,7 +79,7 @@ app.post('/login', async (req, res) => {
         } else if (teacher._id.toString() === "670f9154f104962ab0ef8c07") {
             res.redirect(`/menu/${teacher._id}`)
         } else {
-            return res.redirect(`/parts/${teacher._id}`); // Используем return здесь, если нужно
+            return res.redirect(`/menuTeach/${teacher._id}`); // Используем return здесь, если нужно
         }
     } catch (error) {
         console.error('Ошибка при выполнении запроса к базе данных:', error);
@@ -88,8 +88,14 @@ app.post('/login', async (req, res) => {
 });
 
 app.get(`/menu/:teacherId`, async (req, res) =>{
-    res.render(`menu`)
+    let teacherId = req.params.teacherId;
+    res.render(`menu`, { teacherId })
 })
+
+app.get('/menuTeach/:teacherId', async (req, res) => {
+    let teacherId = req.params.teacherId;
+    res.render('menuTeach', { teacherId });  
+});
 
 app.get('/register', async (req, res) => {
     res.render('registr');
