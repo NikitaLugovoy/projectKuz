@@ -104,7 +104,7 @@
                 {{/each}}
             </tbody>
         </table>
-        <button id="download-pdf">Скачать PDF</button>
+        <button id="download-pdf">Скачать Excel</button>
     </div>
 
     <!-- Modal for editing a report -->
@@ -184,7 +184,7 @@
         let rows = tableBody.getElementsByTagName('tr');
 
         // Создание массива данных для Excel
-        let data = [['Группа', 'Студенты', 'Категория', 'Часть', 'Дата', 'Детали']];
+        let data = [['Группа', 'Студенты', 'Категория', 'Отчёт', 'Дата', 'Детали']];
 
         for (let i = 0; i < rows.length; i++) {
             let groupName = rows[i].cells[0].innerText;
