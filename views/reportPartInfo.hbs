@@ -88,7 +88,7 @@
                     <td>{{this.group_id.name}}</td>
                     <td>
                         {{#each this.student_ids}}
-                        {{this.username}},<br>
+                        {{this.username}}, <br>
                         {{/each}}
                     </td>
                     <td>{{this.category_id.name}}</td>
@@ -381,48 +381,69 @@ document.querySelectorAll('.delete-btn').forEach(button => {
     button.addEventListener('click', handleDelete);
 });
 // Обработчик для кнопки редактирования
+// Обработчик для кнопки редактирования
 document.querySelectorAll('.edit-btn').forEach(button => {
     button.addEventListener('click', async (e) => {
         const reportId = e.target.getAttribute('data-id');
-        
-        // Получаем данные отчёта с сервера
-        const response = await fetch(`/report-part-info/${reportId}`);
-        const report = await response.json();
+        console.log("1")
+        try {
+            console.log("2")
+            // Получаем данные отчёта с сервера
+            const response = await fetch(`/report-part-in/${reportId}`);
+            console.log("3")
+            // Проверка на успешный ответ
+            if (!response.ok) {
+                throw new Error(`Ошибка загрузки отчёта: ${response.statusText}`);
+            }
+            console.log("4")
+            
+ 
+            const report = await response.json();
+            console.log("5")
+            // Заполняем форму редактирования текущими данными отчёта
+            document.getElementById('edit-report-id').value = report._id;
+            document.getElementById('edit-group-select').value = report.group_id._id;
+            document.getElementById('edit-category-select').value = report.category_id._id;
+            document.getElementById('edit-date').value = report.date.split('T')[0];
+            document.getElementById('edit-photo').value = report.photo;
+            document.getElementById('edit-details').value = report.details;
 
-        // Заполняем форму редактирования текущими данными отчёта
-        document.getElementById('edit-report-id').value = report._id;
-        document.getElementById('edit-group-select').value = report.group_id._id;
-        document.getElementById('edit-category-select').value = report.category_id._id;
-        document.getElementById('edit-date').value = report.date.split('T')[0];
-        document.getElementById('edit-photo').value = report.photo;
-        document.getElementById('edit-details').value = report.details;
+            // Очищаем списки студентов и частей перед добавлением новых
+            document.getElementById('edit-student-list').innerHTML = '';
+            document.getElementById('edit-part-select').innerHTML = '<option value="">Сначала выберите категорию</option>';
 
-        // Очищаем списки студентов и частей перед добавлением новых
-        document.getElementById('edit-student-list').innerHTML = '';
-        document.getElementById('edit-part-select').innerHTML = '<option value="">Сначала выберите категорию</option>';
+            // Показать студентов группы
+            const studentCheckboxesContainer = document.getElementById('edit-student-checkboxes');
+            studentCheckboxesContainer.style.display = 'none'; // Скрыть сначала
 
-        // Показать студентов группы
-        const studentCheckboxesContainer = document.getElementById('edit-student-checkboxes');
-        studentCheckboxesContainer.style.display = 'none'; // Скрыть сначала
+            // Получаем студентов текущей группы и отмечаем выбранных
+            await updateStudentList(report.group_id._id, report.student_ids);
+            studentCheckboxesContainer.style.display = 'block'; // Показать после загрузки студентов
 
-        // Получаем студентов текущей группы и отмечаем выбранных
-        await updateStudentList(report.group_id._id, report.student_ids);
-        studentCheckboxesContainer.style.display = 'block'; // Показать после загрузки студентов
-
-        // Загрузка списка частей для выбранной категории
-        const partResponse = await fetch(`/categories/${report.category_id._id}/parts`);
-        const parts = await partResponse.json();
-        parts.forEach(part => {
-            const selected = part._id === report.part_id._id ? 'selected' : '';
-            const option = document.createElement('option');
-            option.value = part._id;
-            option.textContent = part.title;
-            option.selected = selected;
-            document.getElementById('edit-part-select').appendChild(option);
-        });
-
-        // Показать модальное окно
-        new bootstrap.Modal(document.getElementById('editReportModal')).show();
+            // Загрузка списка частей для выбранной категории
+            const partResponse = await fetch(`/categories/${report.category_id._id}/parts`);
+            
+            // Проверка на успешный ответ
+            if (!partResponse.ok) {
+                throw new Error(`Ошибка загрузки частей: ${partResponse.statusText}`);
+            }
+            
+            const parts = await partResponse.json();
+            parts.forEach(part => {
+                const selected = part._id === report.part_id._id ? 'selected' : '';
+                const option = document.createElement('option');
+                option.value = part._id;
+                option.textContent = part.title;
+                option.selected = selected;
+                document.getElementById('edit-part-select').appendChild(option);
+            });
+            
+            // Показать модальное окно
+            new bootstrap.Modal(document.getElementById('editReportModal')).show();
+        } catch (error) {
+            console.error('Произошла ошибка:', error.message);
+            // Здесь вы можете отобразить сообщение об ошибке пользователю, если это необходимо
+            }
     });
 });
 

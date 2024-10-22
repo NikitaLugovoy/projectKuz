@@ -918,6 +918,8 @@ app.get('/categories/:categoryId/parts', async (req, res) => {
     }
 });
 
+
+
 app.get('/report-part-info/:teacherId', async (req, res) => {
     try {
         const reports = await ReportPartInfo.find()
@@ -925,6 +927,7 @@ app.get('/report-part-info/:teacherId', async (req, res) => {
             .populate('student_ids')
             .populate('category_id')
             .populate('part_id');
+            
         const groups = await Group.find();
         const students = await Student.find();
         const categories = await Category.find();
@@ -934,6 +937,27 @@ app.get('/report-part-info/:teacherId', async (req, res) => {
     } catch (error) {
         console.error('Ошибка при получении отчётов:', error);
         res.status(500).send('Ошибка при получении отчётов');
+    }
+});
+
+
+app.get('/report-part-in/:id', async (req, res) => {
+    try {
+        const report = await ReportPartInfo.findById(req.params.id)
+            .populate('group_id')
+            .populate('student_ids')
+            .populate('category_id')
+            .populate('part_id');
+
+        if (!report) {
+            return res.status(404).send('Отчёт не найден.');
+        }
+
+        console.log(report); // Добавлено для отладки
+        res.json(report);
+    } catch (error) {
+        console.error('Ошибка при получении отчёта:', error);
+        res.status(500).send('Ошибка при получении отчёта.');
     }
 });
 
@@ -966,6 +990,7 @@ app.post('/report-part-info', async (req, res) => {
         res.status(500).send('Ошибка при добавлении отчёта');
     }
 });
+
 
 
 
@@ -1013,24 +1038,6 @@ app.delete('/report-part-info/:id', async (req, res) => {
     }
 });
 
-app.get('/report-part-info/:id', async (req, res) => {
-    try {
-        const report = await ReportPartInfo.findById(req.params.id)
-            .populate('group_id')
-            .populate('student_ids')
-            .populate('category_id')
-            .populate('part_id');
-        
-        if (!report) {
-            return res.status(404).send('Отчёт не найден.');
-        }
-
-        res.json(report);
-    } catch (error) {
-        console.error('Ошибка при получении отчёта:', error);
-        res.status(500).send('Ошибка при получении отчёта.');
-    }
-});
 
 
 

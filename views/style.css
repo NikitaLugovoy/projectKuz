@@ -7,3 +7,50 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Убедитесь, что навбар находится выше всего остального */
+}
+
+.container {
+    margin-top: 60px; /* Отступ равный высоте навбара */
+}
+
+#student-form {
+    position: fixed;
+    top: 1380px; /* Настройте это значение в зависимости от высоты навбара */
+    left: 50%;
+    transform: translateX(-50%); /* Центрирование по горизонтали */
+    background-color: white; /* Убедитесь, что фон белый, чтобы не было видно контента под формой */
+    z-index: 1000; /* Убедитесь, что форма находится выше остального контента */
+    padding: 20px; /* Добавьте отступы для удобства */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Добавьте тень для визуального отделения */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* Light background color */
+}
+
+h3, h4 {
+    color: #343a40; /* Darker text color for headings */
+}
+
+.table {
+    margin-top: 20px; /* Space between table and other elements */
+}
+
+.table td, .table th {
+    vertical-align: middle; /* Center align table content */
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        text-align: center; /* Center align navbar items on small screens */
+    }
+}
+
