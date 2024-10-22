@@ -1,28 +1,28 @@
 [{
   "_id": {
-    "$oid": "66fe8e9cb0bb8b382214dabc"
+    "$oid": "67168babdc7175c34cba29e0"
   },
-  "name": "xc",
+  "name": "Патриотическое",
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "66fe8e9eb0bb8b382214dabe"
+    "$oid": "67168bb0dc7175c34cba29e2"
   },
-  "name": "zxczxc",
+  "name": "Военное",
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "66fe8ea0b0bb8b382214dac0"
+    "$oid": "67168bb7dc7175c34cba29e4"
   },
-  "name": "zzzzzz",
+  "name": "Научное",
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "66fe8ea2b0bb8b382214dac2"
+    "$oid": "67168bbedc7175c34cba29e6"
   },
-  "name": "ccccccccccc",
+  "name": "Развлекательное",
   "__v": 0
 }]
