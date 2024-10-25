@@ -2,31 +2,31 @@
   "_id": {
     "$oid": "6504c7a5a5b8f9a6b6d4e123"
   },
-  "full_name": "Teacher Full Name",
-  "login": "teacher_login",
-  "password": "teacher_password",
+  "full_name": "Иванов Иван Иванович",
+  "login": "ivanov_iv",
+  "password": "password",
   "group_id": {
-    "$oid": "67168bd8dc7175c34cba29ee"
+    "$oid": "67168bd2dc7175c34cba29ec"
   },
   "updatedAt": {
-    "$date": "2024-10-21T17:22:11.672Z"
+    "$date": "2024-10-23T14:35:54.776Z"
   }
 },
 {
   "_id": {
     "$oid": "66fe3c0d35d4605410709703"
   },
-  "full_name": "132123",
-  "login": "ммм",
-  "password": "ммм",
+  "full_name": "Петрова Анна Сергеевна",
+  "login": "petrova_anna",
+  "password": "mysecurepass",
   "group_id": {
-    "$oid": "67168bd2dc7175c34cba29ec"
+    "$oid": "67168bd8dc7175c34cba29ee"
   },
   "createdAt": {
     "$date": "2024-10-03T06:39:09.603Z"
   },
   "updatedAt": {
-    "$date": "2024-10-21T17:22:08.399Z"
+    "$date": "2024-10-22T14:42:00.287Z"
   },
   "__v": 0
 },
@@ -34,89 +34,17 @@
   "_id": {
     "$oid": "66fe3ca8e1001cedea972bf0"
   },
-  "full_name": "сячс",
-  "login": "ячс",
-  "password": "ячс",
+  "full_name": "Сидоров Алексей Васильевич",
+  "login": "sidorov_alexey",
+  "password": "qwerty456",
   "group_id": {
-    "$oid": "66fa95f5b5602aa20e0f3caf"
+    "$oid": "67168be1dc7175c34cba29f0"
   },
   "createdAt": {
     "$date": "2024-10-03T06:41:44.102Z"
   },
   "updatedAt": {
-    "$date": "2024-10-03T06:41:58.082Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "66fe3cc6e1001cedea972bfe"
-  },
-  "full_name": "123123",
-  "login": "12312",
-  "password": "123",
-  "group_id": {
-    "$oid": "66fa95f5b5602aa20e0f3caf"
-  },
-  "createdAt": {
-    "$date": "2024-10-03T06:42:14.532Z"
-  },
-  "updatedAt": {
-    "$date": "2024-10-03T06:42:48.458Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "66fe3cf993d147b975d25b5c"
-  },
-  "full_name": "zxc",
-  "login": "12312zxczx",
-  "password": "123xzczx",
-  "group_id": {
-    "$oid": "6504d8a7a5b8f9a6b6d4e130"
-  },
-  "createdAt": {
-    "$date": "2024-10-03T06:43:05.526Z"
-  },
-  "updatedAt": {
-    "$date": "2024-10-03T06:43:05.526Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "66fe52f79218911c02bc9029"
-  },
-  "full_name": "ячсяч",
-  "login": "ячсяч",
-  "password": "123",
-  "group_id": {
-    "$oid": "66fa95f5b5602aa20e0f3caf"
-  },
-  "createdAt": {
-    "$date": "2024-10-03T08:16:55.822Z"
-  },
-  "updatedAt": {
-    "$date": "2024-10-03T08:16:55.822Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "66fe533695e11cb86050da14"
-  },
-  "full_name": "сячс",
-  "login": "12312фвы",
-  "password": "123",
-  "group_id": {
-    "$oid": "66fa95f5b5602aa20e0f3caf"
-  },
-  "createdAt": {
-    "$date": "2024-10-03T08:17:58.629Z"
-  },
-  "updatedAt": {
-    "$date": "2024-10-03T08:18:06.673Z"
+    "$date": "2024-10-22T14:42:14.942Z"
   },
   "__v": 0
 },
@@ -124,32 +52,17 @@
   "_id": {
     "$oid": "670f9154f104962ab0ef8c07"
   },
-  "full_name": "Не Кузько",
-  "login": "1111",
-  "password": "1111",
-  "createdAt": {
-    "$date": "2024-10-16T10:11:32.754Z"
-  },
-  "updatedAt": {
-    "$date": "2024-10-22T09:44:49.631Z"
-  },
-  "__v": 0,
-  "group_id": {
-    "$oid": "67168bd2dc7175c34cba29ec"
-  }
-},
-{
-  "_id": {
-    "$oid": "670f9154f104962ab0ef8c06"
-  },
-  "full_name": "Не Кузько",
+  "full_name": "Кузько Александр Валентинович",
   "login": "admin",
   "password": "admin",
   "createdAt": {
     "$date": "2024-10-16T10:11:32.754Z"
   },
   "updatedAt": {
-    "$date": "2024-10-16T10:11:32.754Z"
+    "$date": "2024-10-23T14:29:51.468Z"
   },
-  "__v": 0
+  "__v": 0,
+  "group_id": {
+    "$oid": "6717c5a1df2ad1ed9c7267db"
+  }
 }]

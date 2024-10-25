@@ -1,314 +1,151 @@
 [{
   "_id": {
-    "$oid": "6703d02f91868a09a9970cbb"
+    "$oid": "6717c3806bc5fec56dc98369"
   },
   "group_id": {
-    "$oid": "6504d8a7a5b8f9a6b6d4e130"
+    "$oid": "67168bd2dc7175c34cba29ec"
   },
   "student_ids": [
     {
-      "$oid": "66fd182b9fedcd0ecb0d7d6e"
-    }
-  ],
-  "category_id": {
-    "$oid": "66fe8e9cb0bb8b382214dabc"
-  },
-  "part_id": {
-    "$oid": "6703cc76465abfb2f298c301"
-  },
-  "date": {
-    "$date": "2024-10-10T00:00:00.000Z"
-  },
-  "photo": "чсчс",
-  "details": "счсчс",
-  "createdAt": {
-    "$date": "2024-10-07T12:12:31.961Z"
-  },
-  "updatedAt": {
-    "$date": "2024-10-08T15:46:08.474Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "6704fdacc3788719cce54d40"
-  },
-  "group_id": {
-    "$oid": "66fa95f5b5602aa20e0f3caf"
-  },
-  "student_ids": [
-    {
-      "$oid": "66fd00bb3be252c13ea21ac5"
-    }
-  ],
-  "category_id": {
-    "$oid": "66fe8e9cb0bb8b382214dabc"
-  },
-  "part_id": {
-    "$oid": "6703cc76465abfb2f298c301"
-  },
-  "date": {
-    "$date": {
-      "$numberLong": "-23892969600000"
-    }
-  },
-  "photo": "s",
-  "details": "s",
-  "createdAt": {
-    "$date": "2024-10-08T09:38:52.546Z"
-  },
-  "updatedAt": {
-    "$date": "2024-10-08T15:45:49.533Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "6704fdccc3788719cce54d47"
-  },
-  "group_id": {
-    "$oid": "6504d8a7a5b8f9a6b6d4e130"
-  },
-  "student_ids": [
-    {
-      "$oid": "6504b6b565d4f9e6e4e5b0a3"
-    }
-  ],
-  "category_id": {
-    "$oid": "66fe8e9cb0bb8b382214dabc"
-  },
-  "part_id": {
-    "$oid": "6703cc76465abfb2f298c301"
-  },
-  "date": {
-    "$date": {
-      "$numberLong": "-23892969600000"
-    }
-  },
-  "photo": "s,,,",
-  "details": "s",
-  "createdAt": {
-    "$date": "2024-10-08T09:39:24.943Z"
-  },
-  "updatedAt": {
-    "$date": "2024-10-08T15:37:28.828Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "6704fe69c3788719cce54d57"
-  },
-  "group_id": {
-    "$oid": "66fa95f5b5602aa20e0f3caf"
-  },
-  "student_ids": [
-    {
-      "$oid": "66fd175ca053be86e8286664"
+      "$oid": "67168c55dc7175c34cba2a03"
     },
     {
-      "$oid": "66fd189e9fedcd0ecb0d7d7b"
+      "$oid": "67168c72dc7175c34cba2a07"
+    },
+    {
+      "$oid": "67168c88dc7175c34cba2a0b"
+    },
+    {
+      "$oid": "6717c27e6bc5fec56dc98352"
     }
   ],
   "category_id": {
-    "$oid": "66fe8e9cb0bb8b382214dabc"
+    "$oid": "67168bb0dc7175c34cba29e2"
   },
   "part_id": {
-    "$oid": "6703cc70465abfb2f298c2f9"
+    "$oid": "6717bbc96bc5fec56dc98267"
   },
   "date": {
-    "$date": {
-      "$numberLong": "-27080352000000"
-    }
+    "$date": "2024-09-02T00:00:00.000Z"
   },
-  "photo": "https://cdn.izap24.ru/images/prodacts/sourse/156782/156782839_opel-astra-4-j-gtc-kreslo-pravaya-perednyaya-voditelya.jpg",
-  "details": "12",
+  "photo": "https://avatars.mds.yandex.net/i?id=2f540122338ae4c899e7d736983017be_l-9264009-images-thumbs&n=13",
+  "details": "Показательные выступления с реконструкцией исторической битвы со студентами в военной форме.",
   "createdAt": {
-    "$date": "2024-10-08T09:42:01.968Z"
+    "$date": "2024-10-22T15:23:44.872Z"
   },
   "updatedAt": {
-    "$date": "2024-10-08T15:41:23.867Z"
+    "$date": "2024-10-22T15:23:44.872Z"
   },
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "67053a79803a94aacc5d04ee"
+    "$oid": "6717c42ddf2ad1ed9c7267ab"
   },
   "group_id": {
-    "$oid": "6504d8a7a5b8f9a6b6d4e130"
+    "$oid": "67168bd8dc7175c34cba29ee"
   },
   "student_ids": [
     {
-      "$oid": "6504b6b565d4f9e6e4e5b0a3"
+      "$oid": "67168cdddc7175c34cba2a0f"
     },
     {
-      "$oid": "66fba34d398a1a215e734073"
+      "$oid": "67168d01dc7175c34cba2a13"
     },
     {
-      "$oid": "66fd1792a053be86e828666c"
+      "$oid": "67168d2ddc7175c34cba2a17"
+    },
+    {
+      "$oid": "6717bc676bc5fec56dc98295"
     }
   ],
   "category_id": {
-    "$oid": "66fe8e9eb0bb8b382214dabe"
+    "$oid": "67168bb7dc7175c34cba29e4"
   },
   "part_id": {
-    "$oid": "6703cc73465abfb2f298c2fd"
+    "$oid": "6717bbe36bc5fec56dc9826f"
   },
   "date": {
-    "$date": {
-      "$numberLong": "-61792934400000"
-    }
+    "$date": "2024-10-21T00:00:00.000Z"
   },
-  "photo": "3",
-  "details": "333",
+  "photo": "https://avatars.mds.yandex.net/i?id=5046335c4743244bf901a6c319af2c5a_l-4535989-images-thumbs&n=13",
+  "details": "Конференция, на которой молодые исследователи представляют свои работы и проекты",
   "createdAt": {
-    "$date": "2024-10-08T13:58:17.447Z"
+    "$date": "2024-10-22T15:26:37.595Z"
   },
   "updatedAt": {
-    "$date": "2024-10-08T15:40:46.498Z"
+    "$date": "2024-10-22T15:26:37.595Z"
   },
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "67053dda803a94aacc5d0561"
+    "$oid": "6717c479df2ad1ed9c7267b4"
   },
   "group_id": {
-    "$oid": "66fa95f5b5602aa20e0f3caf"
+    "$oid": "67168be1dc7175c34cba29f0"
   },
   "student_ids": [
     {
-      "$oid": "66fd175ca053be86e8286664"
+      "$oid": "67168d83dc7175c34cba2a1f"
     },
     {
-      "$oid": "66fd189e9fedcd0ecb0d7d7b"
+      "$oid": "6717c2b16bc5fec56dc9835a"
     }
   ],
   "category_id": {
-    "$oid": "66fe8e9cb0bb8b382214dabc"
+    "$oid": "67168bbedc7175c34cba29e6"
   },
   "part_id": {
-    "$oid": "6703cc70465abfb2f298c2f9"
+    "$oid": "6717bc026bc5fec56dc9827f"
   },
   "date": {
-    "$date": {
-      "$numberLong": "-61758633600000"
-    }
+    "$date": "2024-09-03T00:00:00.000Z"
   },
-  "photo": "2",
-  "details": "3333",
+  "photo": "https://blacktent.ru/wp-content/uploads/2024/06/mgltqpgcpsg.jpg",
+  "details": "Музыкальное мероприятие с участием популярных исполнителей и групп",
   "createdAt": {
-    "$date": "2024-10-08T14:12:42.205Z"
+    "$date": "2024-10-22T15:27:53.824Z"
   },
   "updatedAt": {
-    "$date": "2024-10-08T15:40:28.418Z"
+    "$date": "2024-10-22T15:27:53.824Z"
   },
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "67053fc022add00bb199eeba"
+    "$oid": "67190a3f9f35458dc7b3b7d4"
   },
   "group_id": {
-    "$oid": "66fa95f5b5602aa20e0f3caf"
+    "$oid": "67168bd8dc7175c34cba29ee"
   },
   "student_ids": [
     {
-      "$oid": "66fd175ca053be86e8286664"
+      "$oid": "67168d01dc7175c34cba2a13"
     },
     {
-      "$oid": "66fd189e9fedcd0ecb0d7d7b"
+      "$oid": "6717bc676bc5fec56dc98295"
+    },
+    {
+      "$oid": "6717c2986bc5fec56dc98356"
     }
   ],
   "category_id": {
-    "$oid": "66fe8e9cb0bb8b382214dabc"
+    "$oid": "671909ad9f35458dc7b3b7a7"
   },
   "part_id": {
-    "$oid": "6703cc70465abfb2f298c2f9"
+    "$oid": "671909ed9f35458dc7b3b7bf"
   },
   "date": {
-    "$date": {
-      "$numberLong": "-61433683200000"
-    }
+    "$date": "2024-10-23T00:00:00.000Z"
   },
-  "photo": "https://avatars.mds.yandex.net/i?id=a6e6787195b2ccbc33b21cc693c1eb43d4d02870-5451533-images-thumbs&n=13",
-  "details": "ee",
+  "photo": "https://cdn.culture.ru/images/7be79337-52d4-5d38-abb5-56e421c89ce1",
+  "details": "Провели кросс на базе университета, после чего церемонию награждения в актовом зале",
   "createdAt": {
-    "$date": "2024-10-08T14:20:48.808Z"
+    "$date": "2024-10-23T14:37:51.951Z"
   },
   "updatedAt": {
-    "$date": "2024-10-08T15:34:36.696Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "6705432122add00bb199eed9"
-  },
-  "group_id": {
-    "$oid": "66fa95f5b5602aa20e0f3caf"
-  },
-  "student_ids": [
-    {
-      "$oid": "66fd1740a053be86e828665f"
-    },
-    {
-      "$oid": "66fd175ca053be86e8286664"
-    }
-  ],
-  "category_id": {
-    "$oid": "66fe8e9cb0bb8b382214dabc"
-  },
-  "part_id": {
-    "$oid": "6703cc70465abfb2f298c2f9"
-  },
-  "date": {
-    "$date": {
-      "$numberLong": "-51970723200000"
-    }
-  },
-  "photo": "3",
-  "details": "3",
-  "createdAt": {
-    "$date": "2024-10-08T14:35:13.340Z"
-  },
-  "updatedAt": {
-    "$date": "2024-10-08T15:34:00.982Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "670552c89ee69ca35740fd9a"
-  },
-  "group_id": {
-    "$oid": "6504d8a7a5b8f9a6b6d4e130"
-  },
-  "student_ids": [
-    {
-      "$oid": "6504b6b565d4f9e6e4e5b0a3"
-    },
-    {
-      "$oid": "66fd1792a053be86e828666c"
-    }
-  ],
-  "category_id": {
-    "$oid": "66fe8e9cb0bb8b382214dabc"
-  },
-  "part_id": {
-    "$oid": "6703cc76465abfb2f298c301"
-  },
-  "date": {
-    "$date": "3333-03-13T00:00:00.000Z"
-  },
-  "photo": "https://avatars.mds.yandex.net/get-autoru-vos/2155890/608dbabdbd30c84ddbc4a5d08ff54630/1200x900",
-  "details": "ссс",
-  "createdAt": {
-    "$date": "2024-10-08T15:42:00.950Z"
-  },
-  "updatedAt": {
-    "$date": "2024-10-08T15:42:00.950Z"
+    "$date": "2024-10-23T14:37:51.951Z"
   },
   "__v": 0
 }]

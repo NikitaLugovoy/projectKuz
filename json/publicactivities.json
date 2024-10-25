@@ -1,33 +1,55 @@
 [{
   "_id": {
-    "$oid": "66fe8942054097a6c1ab5aea"
+    "$oid": "6717bb336bc5fec56dc9822a"
   },
-  "participation_details": "чяссс",
+  "participation_details": "Студент стал зрителем исторической реконструкции сражений средневековья в парке",
   "student_id": {
-    "$oid": "66fd175ca053be86e8286664"
+    "$oid": "67168c55dc7175c34cba2a03"
   },
   "has_pushkin_card": true,
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "66fe8c4a054097a6c1ab5b1e"
+    "$oid": "6717bb436bc5fec56dc9822d"
   },
-  "participation_details": "ячс",
+  "participation_details": "Студент участвовал в мастер-классе по итальянской кухне, организованном местным шеф-поваром",
   "student_id": {
-    "$oid": "6504b6b565d4f9e6e4e5b0a3"
+    "$oid": "67168c72dc7175c34cba2a07"
   },
   "has_pushkin_card": true,
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "66fe8ca3054097a6c1ab5b2e"
+    "$oid": "6717bb4f6bc5fec56dc98230"
   },
-  "participation_details": "яяяяяяяяяя",
+  "participation_details": "Студент посетил ежегодный фестиваль культуры и искусств, проводимый в центре города",
   "student_id": {
-    "$oid": "6504b6b565d4f9e6e4e5b0a3"
+    "$oid": "67168c55dc7175c34cba2a03"
   },
-  "has_pushkin_card": false,
+  "has_pushkin_card": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6717bb596bc5fec56dc98233"
+  },
+  "participation_details": "Студент стал участником экологического форума, посвященного устойчивому развитию",
+  "student_id": {
+    "$oid": "67168d2ddc7175c34cba2a17"
+  },
+  "has_pushkin_card": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6717bb696bc5fec56dc98236"
+  },
+  "participation_details": "Студент участвовал в благотворительном концерте, собравшем средства для детей с ограниченными возможностями",
+  "student_id": {
+    "$oid": "67168d83dc7175c34cba2a1f"
+  },
+  "has_pushkin_card": true,
   "__v": 0
 }]

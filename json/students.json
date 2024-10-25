@@ -101,4 +101,56 @@
     "$oid": "67168be1dc7175c34cba29f0"
   },
   "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6717bc676bc5fec56dc98295"
+  },
+  "username": "Андрей Васильев",
+  "phone_number": "+7 (900) 123-45-78",
+  "email": "andrey.vasiliev@example.com",
+  "additional_info": "Любит путешествовать и фотографировать",
+  "group_id": {
+    "$oid": "67168bd8dc7175c34cba29ee"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6717c27e6bc5fec56dc98352"
+  },
+  "username": "Дмитрий Михайлов",
+  "phone_number": "+7 (925) 777-88-99",
+  "email": "dmitry.mikhailov@yandex.ru",
+  "additional_info": "Профессиональный фотограф и путешественник",
+  "group_id": {
+    "$oid": "67168bd2dc7175c34cba29ec"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6717c2986bc5fec56dc98356"
+  },
+  "username": "Анна Петрова",
+  "phone_number": "+7 (925) 111-22-33",
+  "email": "anna.petrova@yandex.ru",
+  "additional_info": "Любит рисовать и увлекается бегом",
+  "group_id": {
+    "$oid": "67168bd8dc7175c34cba29ee"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6717c2b16bc5fec56dc9835a"
+  },
+  "username": "Мария Фёдорова",
+  "phone_number": "+7 (925) 888-99-00",
+  "email": "maria.fedorova@yandex.ru",
+  "additional_info": " Путешественница и любительница кулинарии",
+  "group_id": {
+    "$oid": "67168be1dc7175c34cba29f0"
+  },
+  "__v": 0
 }]
