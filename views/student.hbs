@@ -4,22 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Электронный дневник</title>
-    <!-- Подключение Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Подключение кастомного CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    
-
-    <!-- Контент страницы электронного дневника -->
     <div class="container d-flex flex-column justify-content-center align-items-center vh-100">
         <div class="text-center mb-4">
-            <h3>Студенты</h3> <!-- Название группы -->
+            <h3>Студенты</h3> 
         </div>
 
-        <!-- Форма для добавления нового студента -->
         <form id="student-form" class="mb-4 mt-5">
 
             <h4>Добавить нового студента</h4>
@@ -50,7 +43,6 @@
             <button type="submit" class="btn btn-primary">Добавить студента</button>
         </form>
 
-        <!-- Таблица студентов -->
         <div class="table-responsive">
             <table class="table table-bordered text-center">
                 <thead class="table-light">
@@ -70,7 +62,7 @@
                         <td class="phone_number">{{this.phone_number}}</td>
                         <td class="email">{{this.email}}</td>
                         <td class="additional_info">{{this.additional_info}}</td>
-                        <td class="group">{{this.group_id.name}}</td> <!-- Отображаем название группы -->
+                        <td class="group">{{this.group_id.name}}</td> 
                         <td>
                             <button class="btn btn-warning edit-btn" data-id="{{this._id}}">Редактировать</button>
                             <button class="btn btn-danger delete-btn" data-id="{{this._id}}">Удалить</button>
@@ -83,7 +75,7 @@
                                 <input type="text" name="phone_number" class="form-control" value="{{this.phone_number}}" required>
                                 <input type="email" name="email" class="form-control" value="{{this.email}}" required>
                                 <input type="text" name="additional_info" class="form-control" value="{{this.additional_info}}">
-                                <!-- Поле для выбора группы -->
+
                                 <select class="form-control" name="group_id" required>
                                     {{#each ../groups}}
                                         <option value="{{this._id}}" {{#if (eq this._id ../group_id)}}selected{{/if}}>{{this.name}}</option>
@@ -105,12 +97,10 @@
         </div>
     </div>
 
-    <!-- Подключение Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // JavaScript для обработки добавления студента
         document.getElementById('student-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault(); 
 
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
@@ -124,7 +114,7 @@
             })
             .then(response => {
                 if (response.ok) {
-                    return response.json(); // Wait for the response
+                    return response.json(); 
                 } else {
                     throw new Error("Ошибка при добавлении студента.");
                 }
@@ -144,8 +134,8 @@
                         <button class="btn btn-danger delete-btn" data-id="${student._id}">Удалить</button>
                     </td>
                 `;
-                tableBody.appendChild(newRow); // Add the new row to the table
-                this.reset(); // Reset the form
+                tableBody.appendChild(newRow); 
+                this.reset(); 
             })
             .catch(error => {
                 console.error("Ошибка:", error);
@@ -153,7 +143,6 @@
             });
         });
 
-        // JavaScript для обработки редактирования студентов
         document.querySelectorAll('.edit-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const studentId = this.getAttribute('data-id');
@@ -170,7 +159,6 @@
             });
         });
 
-        // JavaScript для удаления студента
         document.querySelectorAll('.delete-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const studentId = this.getAttribute('data-id');
